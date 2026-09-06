@@ -228,7 +228,6 @@
     transition:border-color .2s, box-shadow .2s;
   }
   .card.active .card-body{ border-color:var(--verde); box-shadow:0 6px 20px rgba(46,125,79,0.18); }
-  .card.active .mini-btn{ background:var(--verde); }
 
   .row-top{
     display:flex;
@@ -271,7 +270,6 @@
     border:none;
     font-family:inherit;
   }
-  .card.active .badge{ background:var(--verde); color:#fff; }
   .badge.known{ background:var(--verde); color:#fff; }
 
   .field-row{
@@ -916,13 +914,13 @@ cuvinte.forEach((c, i)=>{
   card.innerHTML = `
     <div class="card-body">
       <div class="row-top">
-        <div class="mot-fr">${c.mot}<button type="button" class="mini-btn" data-play="mot-${i}">${speakerSvg}</button></div>
+        <div class="mot-fr">${c.mot}</div>
         <button type="button" class="badge" id="badge-${i}" data-known-toggle="${i}" title="Marchează ca știut"></button>
       </div>
       ${c.pron ? `<div class="field-row"><span class="lbl">PR</span><span class="val pron">${c.pron}</span></div>` : ''}
       <div class="field-row"><span class="lbl">RO</span><span class="val">${c.trad}</span></div>
       <hr class="divider-line">
-      <div class="field-row"><span class="lbl">EFR</span><span class="val ex">${c.ex_fr}</span><button type="button" class="mini-btn" data-play="ex-${i}" style="margin-left:4px;">${speakerSvg}</button></div>
+      <div class="field-row"><span class="lbl">EFR</span><span class="val ex">${c.ex_fr}</span></div>
       ${c.pron_ex ? `<div class="field-row"><span class="lbl">PRE</span><span class="val pron">${c.pron_ex}</span></div>` : ''}
       <div class="field-row"><span class="lbl">ERO</span><span class="val">${c.ex_ro}</span></div>
     </div>
