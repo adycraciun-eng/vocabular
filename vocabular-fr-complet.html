@@ -23,7 +23,7 @@
     margin:0;
     min-height:100vh;
     background:var(--bg-page);
-    padding:16px 16px 60px 16px;
+    padding:16px 16px 100px 16px;
   }
   .wrap{width:100%; max-width:460px; margin:0 auto;}
   .icon{ width:16px; height:16px; display:block; flex-shrink:0; }
@@ -61,72 +61,174 @@
   .view{ display:none; }
   .view.active{ display:block; }
 
-  /* ---------- LISTĂ ---------- */
-  .topbar{
-    position:sticky;
-    top:0;
-    z-index:5;
-    background:var(--bg-page);
-    padding:2px 0 12px 0;
+  /* ---------- INSULĂ PLUTITOARE (subsol Listă) ---------- */
+  .island-wrap{
+    position:fixed;
+    left:0; right:0; bottom:18px;
+    display:flex;
+    justify-content:center;
+    z-index:20;
+    pointer-events:none;
+  }
+  .island{
+    pointer-events:auto;
+    background:rgba(27,36,48,0.92);
+    backdrop-filter:blur(6px);
+    border-radius:26px;
+    box-shadow:0 8px 24px rgba(20,25,40,0.28);
+    overflow:hidden;
+    transition:width .25s ease, border-radius .25s ease;
+    width:100%;
+    max-width:428px;
+  }
+  .island.collapsed{
+    width:52px;
+    border-radius:50%;
+  }
+  .island-collapsed-btn{
+    width:52px; height:52px;
+    display:flex; align-items:center; justify-content:center;
+    background:none; border:none; color:#fff; cursor:pointer;
+  }
+  .island-collapsed-btn svg{ width:20px; height:20px; }
+  .island-panel{ display:none; padding:10px 14px 12px 14px; }
+  .island.expanded .island-panel{ display:block; }
+  .island.expanded .island-collapsed-btn{ display:none; }
+
+  .island-row{
     display:flex;
     align-items:center;
-    gap:10px;
+    gap:2px;
   }
-  .title{
-    flex:1;
-    font-size:15.5px;
-    font-weight:700;
-    color:var(--text-dark);
-  }
-  .play-btn{
-    display:flex;
-    align-items:center;
-    gap:7px;
+  .island-mainbar{ flex-wrap:nowrap; }
+  .ghost-btn{
+    background:none;
     border:none;
-    border-radius:12px;
-    background:var(--navy);
-    color:#fff;
-    font-size:13.5px;
-    font-weight:700;
-    padding:11px 16px;
-    cursor:pointer;
-  }
-  .play-btn.playing{ background:var(--verde); }
-  .stop-btn{
-    width:42px; height:42px;
-    border-radius:12px;
-    border:1.5px solid var(--divider);
-    background:#fff;
-    color:var(--text-dark);
-    cursor:pointer;
-    display:none;
+    color:rgba(255,255,255,0.85);
+    display:flex;
     align-items:center;
     justify-content:center;
+    gap:6px;
+    padding:9px 10px;
+    border-radius:14px;
+    cursor:pointer;
+    font-size:13px;
+    font-weight:600;
+    transition:background .15s, color .15s;
   }
-  .stop-btn.show{ display:flex; }
+  .ghost-btn:active{ background:rgba(255,255,255,0.12); }
+  .ghost-btn svg{ width:19px; height:19px; flex-shrink:0; }
+  .ghost-btn.grow{ flex:1; justify-content:center; }
+  .ghost-btn.playing{ color:#8FE0A8; }
+  .ghost-btn.icon-only{ width:36px; height:36px; padding:0; flex-shrink:0; }
+  .ghost-btn.icon-only.muted{ width:26px; color:rgba(255,255,255,0.4); }
+  .ghost-btn.icon-only.muted svg{ width:15px; height:15px; }
+  .ghost-btn.text-btn{ font-size:11.5px; padding:8px 8px; flex-shrink:0; white-space:nowrap; }
+  .ghost-btn.active{ background:rgba(255,255,255,0.14); color:#fff; }
+  .island-search-inline{ flex:1; min-width:0; }
+  .island-search-inline input{
+    width:100%;
+    background:rgba(255,255,255,0.1);
+    border:none;
+    outline:none;
+    border-radius:12px;
+    padding:9px 11px;
+    color:#fff;
+    font-size:13px;
+    font-family:inherit;
+  }
+  .island-search-inline input::placeholder{ color:rgba(255,255,255,0.4); }
+  .island-close{
+    width:36px; height:36px;
+    display:flex; align-items:center; justify-content:center;
+    background:none; border:none; color:rgba(255,255,255,0.6);
+    border-radius:50%;
+    cursor:pointer;
+    flex-shrink:0;
+  }
+  .island-close:active{ background:rgba(255,255,255,0.12); }
+  .island-close svg{ width:16px; height:16px; }
+
+  .island-filter-panel{ display:none; }
+  .island-filter-panel.show{ display:block; }
+
+  .island-search{
+    margin-top:8px;
+    display:flex;
+    align-items:center;
+    gap:8px;
+    background:rgba(255,255,255,0.08);
+    border-radius:14px;
+    padding:9px 12px;
+  }
+  .island-search svg{ width:16px; height:16px; color:rgba(255,255,255,0.6); flex-shrink:0; }
+  .island-search input{
+    flex:1;
+    background:none;
+    border:none;
+    outline:none;
+    color:#fff;
+    font-size:14px;
+    font-family:inherit;
+  }
+  .island-search input::placeholder{ color:rgba(255,255,255,0.45); }
+
+  .island-pills{
+    display:none;
+    gap:6px;
+    overflow-x:auto;
+    padding:8px 0 2px 0;
+    -webkit-overflow-scrolling:touch;
+  }
+  .island-pills.show{ display:flex; }
+  .island-pills::-webkit-scrollbar{ display:none; }
+  .pill-btn{
+    flex-shrink:0;
+    background:rgba(255,255,255,0.08);
+    border:1px solid rgba(255,255,255,0.14);
+    color:rgba(255,255,255,0.8);
+    font-size:12.5px;
+    font-weight:600;
+    padding:7px 13px;
+    border-radius:999px;
+    cursor:pointer;
+    white-space:nowrap;
+  }
+  .pill-btn.active{ background:#fff; color:var(--navy); border-color:#fff; }
+
+  .island-player{ display:none; align-items:center; gap:4px; }
+  .island.is-playing .island-mainbar{ display:none; }
+  .island.is-playing .island-player{ display:flex; }
+  .island.is-playing .island-pills{ display:none !important; }
+  .island.mode-testare .island-pills,
+  .island.mode-testare .island-player{ display:none !important; }
+  .island-player-label{
+    flex:1;
+    min-width:0;
+    color:#fff;
+    font-size:12.5px;
+    font-weight:600;
+    white-space:nowrap;
+    overflow:hidden;
+    text-overflow:ellipsis;
+    padding:0 4px;
+  }
+  .island-player-label small{ display:block; font-weight:400; color:rgba(255,255,255,0.55); font-size:10.5px; }
 
   .card{
-    display:flex;
-    gap:10px;
     margin-bottom:14px;
     transition:transform .15s;
   }
-  .accent-bar{
-    width:6px;
-    border-radius:6px;
-    background:var(--maro);
-    flex-shrink:0;
-    transition:background .2s;
-  }
-  .card.active .accent-bar{ background:var(--verde); }
   .card-body{
-    flex:1;
     background:#fff;
     border-radius:18px;
     padding:18px 20px;
+    border:2px solid transparent;
     box-shadow:0 6px 18px rgba(20,25,40,0.06);
+    transition:border-color .2s, box-shadow .2s;
   }
-  .card.active .card-body{ box-shadow:0 6px 20px rgba(46,125,79,0.18); }
+  .card.active .card-body{ border-color:var(--verde); box-shadow:0 6px 20px rgba(46,125,79,0.18); }
+  .card.active .mini-btn{ background:var(--verde); }
 
   .row-top{
     display:flex;
@@ -156,16 +258,21 @@
   }
   .mini-btn svg{ width:14px; height:14px; }
   .badge{
-    width:34px; height:34px;
-    border-radius:50%;
+    min-width:34px; height:34px;
+    padding:0 6px;
+    border-radius:17px;
     background:#EEF0F3;
     color:var(--label);
     display:flex; align-items:center; justify-content:center;
-    font-size:13px; font-weight:700;
+    font-size:10.5px; font-weight:700;
     flex-shrink:0;
+    cursor:pointer;
     transition:background .2s, color .2s;
+    border:none;
+    font-family:inherit;
   }
   .card.active .badge{ background:var(--verde); color:#fff; }
+  .badge.known{ background:var(--verde); color:#fff; }
 
   .field-row{
     display:flex;
@@ -243,11 +350,12 @@
     letter-spacing:0.5px;
   }
   .badge-q{
-    width:42px; height:42px;
-    border-radius:50%;
+    min-width:42px; height:42px;
+    padding:0 6px;
+    border-radius:21px;
     border:1.5px solid var(--divider);
     display:flex; align-items:center; justify-content:center;
-    font-size:12.5px; font-weight:700; color:var(--text-dark);
+    font-size:11px; font-weight:700; color:var(--text-dark);
   }
 
   .prompt-word{
@@ -426,30 +534,55 @@
 
 <div class="wrap">
 
-  <div class="main-tabs">
-    <button type="button" class="active" id="tab-lista">
-      <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 6h16M4 12h16M4 18h10"/></svg>
-      Listă
-    </button>
-    <button type="button" id="tab-testare">
-      <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
-      Testare
-    </button>
-  </div>
-
   <!-- ===================== VIEW: LISTĂ ===================== -->
   <div class="view active" id="view-lista">
-    <div class="topbar">
-      <div class="title">Vocabular FR · 5 cuvinte</div>
-      <button type="button" class="stop-btn" id="stop-btn" title="Oprește">
-        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="6" y="6" width="12" height="12" rx="2"/></svg>
-      </button>
-      <button type="button" class="play-btn" id="play-btn">
-        <svg class="icon" id="play-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M7 5.5v13l11-6.5-11-6.5z"/></svg>
-        <span id="play-label">Redă tot</span>
-      </button>
-    </div>
     <div id="list"></div>
+  </div>
+
+  <!-- ===================== INSULĂ PLUTITOARE (navigare + control listă) ===================== -->
+  <div class="island-wrap" id="island-wrap">
+    <div class="island collapsed" id="island">
+      <button type="button" class="island-collapsed-btn" id="island-open-btn" title="Deschide">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M18 15l-6-6-6 6"/></svg>
+      </button>
+      <div class="island-panel">
+        <div class="island-row island-mainbar">
+          <div class="island-search-inline">
+            <input type="text" id="word-search" placeholder="Caută...">
+          </div>
+          <button type="button" class="ghost-btn icon-only" id="island-play-btn" title="Redă ce e filtrat">
+            <svg id="island-play-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M7 5.5v13l11-6.5-11-6.5z"/></svg>
+          </button>
+          <button type="button" class="ghost-btn icon-only active" id="filter-toggle-btn" title="Categorii">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 6h16M4 12h16M4 18h10"/></svg>
+          </button>
+          <button type="button" class="ghost-btn text-btn" id="tab-fr-ro" title="Testare FR spre RO">FR→RO</button>
+          <button type="button" class="ghost-btn text-btn" id="tab-ro-fr" title="Testare RO spre FR">RO→FR</button>
+          <button type="button" class="ghost-btn icon-only muted" id="island-collapse-btn" title="Închide">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M18 9l-6 6-6-6"/></svg>
+          </button>
+        </div>
+        <div class="island-pills" id="category-pills"></div>
+        <div class="island-row island-player">
+          <button type="button" class="ghost-btn" id="island-prev-btn">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 6l-6 6 6 6"/></svg>
+          </button>
+          <div class="island-player-label" id="island-player-label">
+            <small id="island-player-count">1 din 5</small>
+            <span id="island-player-word">chantier</span>
+          </div>
+          <button type="button" class="ghost-btn" id="island-pause-btn">
+            <svg id="island-pause-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><line x1="8" y1="5" x2="8" y2="19"/><line x1="16" y1="5" x2="16" y2="19"/></svg>
+          </button>
+          <button type="button" class="ghost-btn" id="island-next-btn">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg>
+          </button>
+          <button type="button" class="island-close" id="island-stop-btn" title="Oprește">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="6" y="6" width="12" height="12" rx="2"/></svg>
+          </button>
+        </div>
+      </div>
+    </div>
   </div>
 
   <!-- ===================== VIEW: TESTARE ===================== -->
@@ -510,7 +643,7 @@
               </div>
             </td>
           </tr>
-          <tr>
+          <tr id="row-3">
             <td class="col-task"><span class="task-label" id="label-3">TRADUCERE</span><span class="task-sub" id="sub-3">în română</span></td>
             <td class="col-answer"><input type="text" class="ans-input" id="in-3" placeholder=""><div class="correct-hint" id="hint-3"></div></td>
           </tr>
@@ -537,26 +670,133 @@
 <script>
 /* ======================= DATE COMUNE ======================= */
 const cuvinte = [
-  { mot:"chantier", pron:"șan-ti-EI", trad:"șantier", articol:"le",
-    ex_fr:"Le chantier sera terminé la semaine prochaine.",
-    pron_ex:"lö șan-ti-EI sö-RA ter-mi-NE la sö-MEN pro-ȘEN",
-    ex_ro:"Șantierul va fi terminat săptămâna viitoare." },
-  { mot:"réseau", pron:"re-ZO", trad:"rețea", articol:"le",
-    ex_fr:"Nous installons un nouveau réseau de fibre optique.",
-    pron_ex:"nu ăn-sta-LON ăn nu-VO re-ZO dö FIBR op-TIK",
-    ex_ro:"Instalăm o rețea nouă de fibră optică." },
-  { mot:"facture", pron:"fak-TÜR", trad:"factură", articol:"la",
-    ex_fr:"La facture doit être envoyée avant vendredi.",
-    pron_ex:"la fak-TÜR dua ETR ăn-vua-IE a-VĂ vă-drö-DI",
-    ex_ro:"Factura trebuie trimisă până vineri." },
-  { mot:"livraison", pron:"li-vre-ZON", trad:"livrare", articol:"la",
-    ex_fr:"La livraison a été retardée à cause de la météo.",
-    pron_ex:"la li-vre-ZON a e-TE rö-tar-DE a KOZ dö la me-te-O",
-    ex_ro:"Livrarea a fost întârziată din cauza vremii." },
-  { mot:"échéance", pron:"e-șe-ANS", trad:"termen limită", articol:"la",
-    ex_fr:"Nous devons respecter l'échéance du contrat.",
-    pron_ex:"nu dö-VON res-pek-TE le-șe-ANS dü kon-TRA",
-    ex_ro:"Trebuie să respectăm termenul limită al contractului." }
+  { id:1, mot:"Comment allez-vous ?", pron:"co-man-ta-le-VU", trad:"Ce mai faceți? / Cum vă simțiți?", ex_fr:"Bonjour Madame, comment allez-vous ?", pron_ex:"bon-JUR ma-DAM, co-man-ta-le-VU", ex_ro:"Bună ziua, doamnă, ce mai faceți?", categorie:"Saluturi și expresii uzuale", audio_fr:"audio/fr/001.mp3", audio_ro:"audio/ro/001.mp3" },
+  { id:2, mot:"Bonne journée !", pron:"bon jur-NE", trad:"O zi frumoasă!", ex_fr:"Merci pour votre aide. Bonne journée !", pron_ex:"mer-SI pur votr ED. bon jur-NE", ex_ro:"Mulțumesc pentru ajutor. O zi frumoasă!", categorie:"Saluturi și expresii uzuale", audio_fr:"audio/fr/002.mp3", audio_ro:"audio/ro/002.mp3" },
+  { id:3, mot:"Bonne nuit !", pron:"bon-NUI", trad:"Noapte bună!", ex_fr:"Je vais me coucher. Bonne nuit !", pron_ex:"jă VE mă cu-ȘE. bon-NUI", ex_ro:"Mă duc să mă culc. Noapte bună!", categorie:"Saluturi și expresii uzuale", audio_fr:"audio/fr/003.mp3", audio_ro:"audio/ro/003.mp3" },
+  { id:4, mot:"Bonne soirée !", pron:"bon sua-RE", trad:"O seară frumoasă!", ex_fr:"Merci Madame, bonne soirée à vous !", pron_ex:"mer-SI ma-DAM, bon sua-RE a VU", ex_ro:"Mulțumesc, doamnă. O seară frumoasă și dumneavoastră!", categorie:"Saluturi și expresii uzuale", audio_fr:"audio/fr/004.mp3", audio_ro:"audio/ro/004.mp3" },
+  { id:5, mot:"À tout à l'heure !", pron:"a tu-ta-LĂR", trad:"Pe mai târziu!", ex_fr:"On se voit après mon rendez-vous. À tout à l'heure !", pron_ex:"on să VUA a-PRE mon ran-de-VU. a tu-ta-LĂR", ex_ro:"Ne vedem după întâlnirea mea. Pe mai târziu!", categorie:"Saluturi și expresii uzuale", audio_fr:"audio/fr/005.mp3", audio_ro:"audio/ro/005.mp3" },
+  { id:6, mot:"ennuyé", pron:"a-nui-E", trad:"deranjat / plictisit", ex_fr:"Je l'ai dit parce que j'étais ennuyé.", pron_ex:"jă le DI pars că jă-TE a-nui-E", ex_ro:"Am spus-o pentru că eram deranjat.", categorie:"Stări, emoții și trăsături", audio_fr:"audio/fr/006.mp3", audio_ro:"audio/ro/006.mp3" },
+  { id:7, mot:"content", pron:"con-TAN", trad:"bucuros / mulțumit", ex_fr:"Je suis content de vous rencontrer.", pron_ex:"jă sui con-TAN dă vu ran-con-TRE", ex_ro:"Mă bucur să vă cunosc.", categorie:"Stări, emoții și trăsături", audio_fr:"audio/fr/007.mp3", audio_ro:"audio/ro/007.mp3" },
+  { id:8, mot:"stressé", pron:"stre-SE", trad:"stresat", ex_fr:"Je suis stressé avant la réunion.", pron_ex:"jă sui stre-SE a-VAN la re-iu-NION", ex_ro:"Sunt stresat înaintea ședinței.", categorie:"Stări, emoții și trăsături", audio_fr:"audio/fr/008.mp3", audio_ro:"audio/ro/008.mp3" },
+  { id:9, mot:"joyeux", pron:"jua-IĂ", trad:"vesel", ex_fr:"Il est joyeux aujourd'hui.", pron_ex:"il e jua-IĂ o-jur-DIUI", ex_ro:"El este vesel astăzi.", categorie:"Stări, emoții și trăsături", audio_fr:"audio/fr/009.mp3", audio_ro:"audio/ro/009.mp3" },
+  { id:10, mot:"fatigué", pron:"fa-ti-GHE", trad:"obosit", ex_fr:"Je suis fatigué après le travail.", pron_ex:"jă sui fa-ti-GHE a-PRE lă tra-VAI", ex_ro:"Sunt obosit după muncă.", categorie:"Stări, emoții și trăsături", audio_fr:"audio/fr/010.mp3", audio_ro:"audio/ro/010.mp3" },
+  { id:11, mot:"heureux", pron:"ă-RĂ", trad:"fericit", ex_fr:"Nous sommes heureux de ce résultat.", pron_ex:"nu som ă-RĂ dă să re-ziul-TA", ex_ro:"Suntem fericiți de acest rezultat.", categorie:"Stări, emoții și trăsături", audio_fr:"audio/fr/011.mp3", audio_ro:"audio/ro/011.mp3" },
+  { id:12, mot:"triste", pron:"TRIST", trad:"trist", ex_fr:"Elle est triste aujourd'hui.", pron_ex:"el e TRIST o-jur-DIUI", ex_ro:"Ea este tristă astăzi.", categorie:"Stări, emoții și trăsături", audio_fr:"audio/fr/012.mp3", audio_ro:"audio/ro/012.mp3" },
+  { id:13, mot:"énervé", pron:"e-ner-VE", trad:"nervos / iritat", ex_fr:"Il est énervé à cause du retard.", pron_ex:"il e e-ner-VE a COZ diu ră-TAR", ex_ro:"El este nervos din cauza întârzierii.", categorie:"Stări, emoții și trăsături", audio_fr:"audio/fr/013.mp3", audio_ro:"audio/ro/013.mp3" },
+  { id:14, mot:"sympa", pron:"sen-PA", trad:"simpatic / drăguț", ex_fr:"Mon collègue est très sympa.", pron_ex:"mon co-LEG e tre sen-PA", ex_ro:"Colegul meu este foarte simpatic.", categorie:"Stări, emoții și trăsături", audio_fr:"audio/fr/014.mp3", audio_ro:"audio/ro/014.mp3" },
+  { id:15, mot:"honnête", pron:"o-NET", trad:"cinstit / onest", ex_fr:"C'est une personne honnête.", pron_ex:"se TIUN per-SON o-NET", ex_ro:"Este o persoană cinstită.", categorie:"Stări, emoții și trăsături", audio_fr:"audio/fr/015.mp3", audio_ro:"audio/ro/015.mp3" },
+  { id:16, mot:"drôle", pron:"DROL", trad:"amuzant", ex_fr:"Ce film est très drôle.", pron_ex:"să FILM e tre DROL", ex_ro:"Acest film este foarte amuzant.", categorie:"Stări, emoții și trăsături", audio_fr:"audio/fr/016.mp3", audio_ro:"audio/ro/016.mp3" },
+  { id:17, mot:"calme", pron:"CALM", trad:"calm / liniștit", ex_fr:"Elle reste calme pendant la discussion.", pron_ex:"el REST CALM pan-DAN la dis-ciu-SION", ex_ro:"Ea rămâne calmă în timpul discuției.", categorie:"Stări, emoții și trăsături", audio_fr:"audio/fr/017.mp3", audio_ro:"audio/ro/017.mp3" },
+  { id:18, mot:"sympathique", pron:"san-pa-TIC", trad:"simpatic / amabil", ex_fr:"La professeure est sympathique.", pron_ex:"la pro-fe-SĂR e san-pa-TIC", ex_ro:"Profesoara este simpatică.", categorie:"Stări, emoții și trăsături", audio_fr:"audio/fr/018.mp3", audio_ro:"audio/ro/018.mp3" },
+  { id:19, mot:"gentil", pron:"jan-TI", trad:"drăguț / amabil", ex_fr:"Il est gentil avec tout le monde.", pron_ex:"il e jan-TI a-VEC tu lă MOND", ex_ro:"El este amabil cu toată lumea.", categorie:"Stări, emoții și trăsături", audio_fr:"audio/fr/019.mp3", audio_ro:"audio/ro/019.mp3" },
+  { id:20, mot:"poli", pron:"po-LI", trad:"politicos", ex_fr:"Cet enfant est très poli.", pron_ex:"set an-FAN e tre po-LI", ex_ro:"Acest copil este foarte politicos.", categorie:"Stări, emoții și trăsături", audio_fr:"audio/fr/020.mp3", audio_ro:"audio/ro/020.mp3" },
+  { id:21, mot:"intelligent", pron:"an-te-li-JAN", trad:"inteligent", ex_fr:"C'est un ingénieur intelligent.", pron_ex:"se TĂN an-je-NIĂR an-te-li-JAN", ex_ro:"Este un inginer inteligent.", categorie:"Stări, emoții și trăsături", audio_fr:"audio/fr/021.mp3", audio_ro:"audio/ro/021.mp3" },
+  { id:22, mot:"orange", pron:"o-RANJ", trad:"portocaliu", ex_fr:"La voiture est orange.", pron_ex:"la vua-TIUR e o-RANJ", ex_ro:"Mașina este portocalie.", categorie:"Culori", audio_fr:"audio/fr/022.mp3", audio_ro:"audio/ro/022.mp3" },
+  { id:23, mot:"marron", pron:"ma-RON", trad:"maro", ex_fr:"Mes chaussures sont marron.", pron_ex:"me șo-ZIUR son ma-RON", ex_ro:"Pantofii mei sunt maro.", categorie:"Culori", audio_fr:"audio/fr/023.mp3", audio_ro:"audio/ro/023.mp3" },
+  { id:24, mot:"rose", pron:"ROZ", trad:"roz", ex_fr:"Elle porte une chemise rose.", pron_ex:"el PORT iun șă-MIZ ROZ", ex_ro:"Ea poartă o cămașă roz.", categorie:"Culori", audio_fr:"audio/fr/024.mp3", audio_ro:"audio/ro/024.mp3" },
+  { id:25, mot:"jaune", pron:"JON", trad:"galben", ex_fr:"Le soleil est jaune.", pron_ex:"lă so-LEI e JON", ex_ro:"Soarele este galben.", categorie:"Culori", audio_fr:"audio/fr/025.mp3", audio_ro:"audio/ro/025.mp3" },
+  { id:26, mot:"bleu", pron:"BLĂ", trad:"albastru", ex_fr:"Le ciel est bleu.", pron_ex:"lă SIEL e BLĂ", ex_ro:"Cerul este albastru.", categorie:"Culori", audio_fr:"audio/fr/026.mp3", audio_ro:"audio/ro/026.mp3" },
+  { id:27, mot:"blanc", pron:"BLAN", trad:"alb", ex_fr:"Le mur est blanc.", pron_ex:"lă MIUR e BLAN", ex_ro:"Peretele este alb.", categorie:"Culori", audio_fr:"audio/fr/027.mp3", audio_ro:"audio/ro/027.mp3" },
+  { id:28, mot:"noir", pron:"NUAR", trad:"negru", ex_fr:"Mon téléphone est noir.", pron_ex:"mon te-le-FON e NUAR", ex_ro:"Telefonul meu este negru.", categorie:"Culori", audio_fr:"audio/fr/028.mp3", audio_ro:"audio/ro/028.mp3" },
+  { id:29, mot:"rouge", pron:"RUJ", trad:"roșu", ex_fr:"Le feu est rouge.", pron_ex:"lă FĂ e RUJ", ex_ro:"Semaforul este roșu.", categorie:"Culori", audio_fr:"audio/fr/029.mp3", audio_ro:"audio/ro/029.mp3" },
+  { id:30, mot:"vert", pron:"VER", trad:"verde", ex_fr:"L'herbe est verte.", pron_ex:"ERB e VERT", ex_ro:"Iarba este verde.", categorie:"Culori", audio_fr:"audio/fr/030.mp3", audio_ro:"audio/ro/030.mp3" },
+  { id:31, mot:"violet", pron:"vio-LE", trad:"violet / mov", ex_fr:"Elle a un sac violet.", pron_ex:"el a ăn SAC vio-LE", ex_ro:"Ea are o geantă mov.", categorie:"Culori", audio_fr:"audio/fr/031.mp3", audio_ro:"audio/ro/031.mp3" },
+  { id:32, mot:"gris", pron:"GRI", trad:"gri", ex_fr:"Le bâtiment est gris.", pron_ex:"lă ba-ti-MAN e GRI", ex_ro:"Clădirea este gri.", categorie:"Culori", audio_fr:"audio/fr/032.mp3", audio_ro:"audio/ro/032.mp3" },
+  { id:33, mot:"petite-fille", pron:"pă-tit FII", trad:"nepoată", ex_fr:"Ma petite-fille habite à Bruxelles.", pron_ex:"ma pă-tit FII a-BIT a briu-SEL", ex_ro:"Nepoata mea locuiește la Bruxelles.", categorie:"Familia", audio_fr:"audio/fr/033.mp3", audio_ro:"audio/ro/033.mp3" },
+  { id:34, mot:"papa", pron:"pa-PA", trad:"tata", ex_fr:"Mon papa travaille en Belgique.", pron_ex:"mon pa-PA tra-VAI an bel-JIC", ex_ro:"Tata lucrează în Belgia.", categorie:"Familia", audio_fr:"audio/fr/034.mp3", audio_ro:"audio/ro/034.mp3" },
+  { id:35, mot:"maman", pron:"ma-MAN", trad:"mama", ex_fr:"Ma maman prépare le dîner.", pron_ex:"ma ma-MAN pre-PAR lă di-NE", ex_ro:"Mama pregătește cina.", categorie:"Familia", audio_fr:"audio/fr/035.mp3", audio_ro:"audio/ro/035.mp3" },
+  { id:36, mot:"petit-fils", pron:"pă-ti FIS", trad:"nepot", ex_fr:"Son petit-fils a dix ans.", pron_ex:"son pă-ti FIS a di-ZAN", ex_ro:"Nepotul său are zece ani.", categorie:"Familia", audio_fr:"audio/fr/036.mp3", audio_ro:"audio/ro/036.mp3" },
+  { id:37, mot:"mari", pron:"ma-RI", trad:"soț", ex_fr:"Son mari est médecin.", pron_ex:"son ma-RI e med-SEN", ex_ro:"Soțul ei este medic.", categorie:"Familia", audio_fr:"audio/fr/037.mp3", audio_ro:"audio/ro/037.mp3" },
+  { id:38, mot:"femme", pron:"FAM", trad:"soție / femeie", ex_fr:"Ma femme parle français.", pron_ex:"ma FAM parl fran-SE", ex_ro:"Soția mea vorbește franceză.", categorie:"Familia", audio_fr:"audio/fr/038.mp3", audio_ro:"audio/ro/038.mp3" },
+  { id:39, mot:"tante", pron:"TANT", trad:"mătușă", ex_fr:"Ma tante habite à Paris.", pron_ex:"ma TANT a-BIT a pa-RI", ex_ro:"Mătușa mea locuiește la Paris.", categorie:"Familia", audio_fr:"audio/fr/039.mp3", audio_ro:"audio/ro/039.mp3" },
+  { id:40, mot:"oncle", pron:"ONCL", trad:"unchi", ex_fr:"Mon oncle vient demain.", pron_ex:"mon ONCL vien dă-MEN", ex_ro:"Unchiul meu vine mâine.", categorie:"Familia", audio_fr:"audio/fr/040.mp3", audio_ro:"audio/ro/040.mp3" },
+  { id:41, mot:"cousin", pron:"cu-ZAN", trad:"văr", ex_fr:"Mon cousin travaille en Allemagne.", pron_ex:"mon cu-ZAN tra-VAI an a-lă-MANI", ex_ro:"Vărul meu lucrează în Germania.", categorie:"Familia", audio_fr:"audio/fr/041.mp3", audio_ro:"audio/ro/041.mp3" },
+  { id:42, mot:"enfant", pron:"an-FAN", trad:"copil", ex_fr:"Cet enfant joue dans le jardin.", pron_ex:"set an-FAN JU dan lă jar-DEN", ex_ro:"Acest copil se joacă în grădină.", categorie:"Familia", audio_fr:"audio/fr/042.mp3", audio_ro:"audio/ro/042.mp3" },
+  { id:43, mot:"fille", pron:"FII", trad:"fiică / fată", ex_fr:"Ils ont une fille.", pron_ex:"il zon TIUN FII", ex_ro:"Ei au o fiică.", categorie:"Familia", audio_fr:"audio/fr/043.mp3", audio_ro:"audio/ro/043.mp3" },
+  { id:44, mot:"fils", pron:"FIS", trad:"fiu", ex_fr:"Leur fils est étudiant.", pron_ex:"lăr FIS e e-tiu-DIAN", ex_ro:"Fiul lor este student.", categorie:"Familia", audio_fr:"audio/fr/044.mp3", audio_ro:"audio/ro/044.mp3" },
+  { id:45, mot:"sœur", pron:"SĂR", trad:"soră", ex_fr:"Ma sœur habite en Belgique.", pron_ex:"ma SĂR a-BIT an bel-JIC", ex_ro:"Sora mea locuiește în Belgia.", categorie:"Familia", audio_fr:"audio/fr/045.mp3", audio_ro:"audio/ro/045.mp3" },
+  { id:46, mot:"frère", pron:"FRER", trad:"frate", ex_fr:"Mon frère parle français.", pron_ex:"mon FRER parl fran-SE", ex_ro:"Fratele meu vorbește franceză.", categorie:"Familia", audio_fr:"audio/fr/046.mp3", audio_ro:"audio/ro/046.mp3" },
+  { id:47, mot:"grand-père", pron:"gran-PER", trad:"bunic", ex_fr:"Mon grand-père aime lire.", pron_ex:"mon gran-PER em LIR", ex_ro:"Bunicului meu îi place să citească.", categorie:"Familia", audio_fr:"audio/fr/047.mp3", audio_ro:"audio/ro/047.mp3" },
+  { id:48, mot:"père", pron:"PER", trad:"tată", ex_fr:"Son père est professeur.", pron_ex:"son PER e pro-fe-SĂR", ex_ro:"Tatăl său este profesor.", categorie:"Familia", audio_fr:"audio/fr/048.mp3", audio_ro:"audio/ro/048.mp3" },
+  { id:49, mot:"mère", pron:"MER", trad:"mamă", ex_fr:"Sa mère est très gentille.", pron_ex:"sa MER e tre jan-TII", ex_ro:"Mama sa este foarte drăguță.", categorie:"Familia", audio_fr:"audio/fr/049.mp3", audio_ro:"audio/ro/049.mp3" },
+  { id:50, mot:"grand-mère", pron:"gran-MER", trad:"bunică", ex_fr:"Ma grand-mère fait un gâteau.", pron_ex:"ma gran-MER fe TĂN ga-TO", ex_ro:"Bunica mea face o prăjitură.", categorie:"Familia", audio_fr:"audio/fr/050.mp3", audio_ro:"audio/ro/050.mp3" },
+  { id:51, mot:"natation", pron:"na-ta-SION", trad:"înot", ex_fr:"Je fais de la natation le samedi.", pron_ex:"jă FE dă la na-ta-SION lă sam-DI", ex_ro:"Fac înot sâmbăta.", categorie:"Activități și timp liber", audio_fr:"audio/fr/051.mp3", audio_ro:"audio/ro/051.mp3" },
+  { id:52, mot:"peinture", pron:"pen-TIUR", trad:"pictură", ex_fr:"Elle aime la peinture.", pron_ex:"el EM la pen-TIUR", ex_ro:"Ei îi place pictura.", categorie:"Activități și timp liber", audio_fr:"audio/fr/052.mp3", audio_ro:"audio/ro/052.mp3" },
+  { id:53, mot:"bricolage", pron:"bri-co-LAJ", trad:"bricolaj / meșterit", ex_fr:"Je fais du bricolage le week-end.", pron_ex:"jă FE diu bri-co-LAJ lă ui-CHEND", ex_ro:"Meșteresc în weekend.", categorie:"Activități și timp liber", audio_fr:"audio/fr/053.mp3", audio_ro:"audio/ro/053.mp3" },
+  { id:54, mot:"dessin", pron:"de-SEN", trad:"desen", ex_fr:"Cet enfant aime le dessin.", pron_ex:"set an-FAN EM lă de-SEN", ex_ro:"Acestui copil îi place desenul.", categorie:"Activități și timp liber", audio_fr:"audio/fr/054.mp3", audio_ro:"audio/ro/054.mp3" },
+  { id:55, mot:"cuisine", pron:"ciui-ZIN", trad:"bucătărie / gătit", ex_fr:"J'aime la cuisine française.", pron_ex:"jem la ciui-ZIN fran-SEZ", ex_ro:"Îmi place bucătăria franceză.", categorie:"Activități și timp liber", audio_fr:"audio/fr/055.mp3", audio_ro:"audio/ro/055.mp3" },
+  { id:56, mot:"vélo", pron:"ve-LO", trad:"bicicletă / ciclism", ex_fr:"Je vais au travail à vélo.", pron_ex:"jă VE o tra-VAI a ve-LO", ex_ro:"Merg la serviciu cu bicicleta.", categorie:"Activități și timp liber", audio_fr:"audio/fr/056.mp3", audio_ro:"audio/ro/056.mp3" },
+  { id:57, mot:"musée", pron:"miu-ZE", trad:"muzeu", ex_fr:"Nous visitons le musée demain.", pron_ex:"nu vi-zi-TON lă miu-ZE dă-MEN", ex_ro:"Vizităm muzeul mâine.", categorie:"Activități și timp liber", audio_fr:"audio/fr/057.mp3", audio_ro:"audio/ro/057.mp3" },
+  { id:58, mot:"sport", pron:"SPOR", trad:"sport", ex_fr:"Je fais du sport trois fois par semaine.", pron_ex:"jă FE diu SPOR trua FUA par să-MEN", ex_ro:"Fac sport de trei ori pe săptămână.", categorie:"Activități și timp liber", audio_fr:"audio/fr/058.mp3", audio_ro:"audio/ro/058.mp3" },
+  { id:59, mot:"danse", pron:"DANS", trad:"dans", ex_fr:"Elle prend des cours de danse.", pron_ex:"el PRAN de CUR dă DANS", ex_ro:"Ea urmează cursuri de dans.", categorie:"Activități și timp liber", audio_fr:"audio/fr/059.mp3", audio_ro:"audio/ro/059.mp3" },
+  { id:60, mot:"cinéma", pron:"si-ne-MA", trad:"cinematograf / cinema", ex_fr:"Nous allons au cinéma ce soir.", pron_ex:"nu za-LON o si-ne-MA să SUAR", ex_ro:"Mergem la cinema în această seară.", categorie:"Activități și timp liber", audio_fr:"audio/fr/060.mp3", audio_ro:"audio/ro/060.mp3" },
+  { id:61, mot:"football", pron:"fut-BOL", trad:"fotbal", ex_fr:"Ils jouent au football après l'école.", pron_ex:"il JU o fut-BOL a-PRE le-COL", ex_ro:"Ei joacă fotbal după școală.", categorie:"Activități și timp liber", audio_fr:"audio/fr/061.mp3", audio_ro:"audio/ro/061.mp3" },
+  { id:62, mot:"âgé", pron:"a-JE", trad:"în vârstă", ex_fr:"C'est un homme âgé.", pron_ex:"se TĂN OM a-JE", ex_ro:"Este un bărbat în vârstă.", categorie:"Descrierea persoanelor și lucrurilor", audio_fr:"audio/fr/062.mp3", audio_ro:"audio/ro/062.mp3" },
+  { id:63, mot:"jeune", pron:"JĂN", trad:"tânăr", ex_fr:"Elle est jeune et dynamique.", pron_ex:"el e JĂN e di-na-MIC", ex_ro:"Ea este tânără și dinamică.", categorie:"Descrierea persoanelor și lucrurilor", audio_fr:"audio/fr/063.mp3", audio_ro:"audio/ro/063.mp3" },
+  { id:64, mot:"vieux", pron:"VIĂ", trad:"bătrân / vechi", ex_fr:"Ce bâtiment est très vieux.", pron_ex:"să ba-ti-MAN e tre VIĂ", ex_ro:"Această clădire este foarte veche.", categorie:"Descrierea persoanelor și lucrurilor", audio_fr:"audio/fr/064.mp3", audio_ro:"audio/ro/064.mp3" },
+  { id:65, mot:"maigre", pron:"MEGR", trad:"slab", ex_fr:"Le chien est trop maigre.", pron_ex:"lă ȘIEN e tro MEGR", ex_ro:"Câinele este prea slab.", categorie:"Descrierea persoanelor și lucrurilor", audio_fr:"audio/fr/065.mp3", audio_ro:"audio/ro/065.mp3" },
+  { id:66, mot:"mince", pron:"MENS", trad:"suplu / slab", ex_fr:"Il est grand et mince.", pron_ex:"il e GRAN e MENS", ex_ro:"El este înalt și suplu.", categorie:"Descrierea persoanelor și lucrurilor", audio_fr:"audio/fr/066.mp3", audio_ro:"audio/ro/066.mp3" },
+  { id:67, mot:"gros", pron:"GRO", trad:"gras / mare", ex_fr:"Le chat est un peu gros.", pron_ex:"lă ȘA e TĂN pă GRO", ex_ro:"Pisica este puțin grasă.", categorie:"Descrierea persoanelor și lucrurilor", audio_fr:"audio/fr/067.mp3", audio_ro:"audio/ro/067.mp3" },
+  { id:68, mot:"petit", pron:"pă-TI", trad:"mic / scund", ex_fr:"C'est un petit appartement.", pron_ex:"se TĂN pă-TI a-par-tă-MAN", ex_ro:"Este un apartament mic.", categorie:"Descrierea persoanelor și lucrurilor", audio_fr:"audio/fr/068.mp3", audio_ro:"audio/ro/068.mp3" },
+  { id:69, mot:"beau", pron:"BO", trad:"frumos", ex_fr:"C'est un beau paysage.", pron_ex:"se TĂN BO pei-ZAJ", ex_ro:"Este un peisaj frumos.", categorie:"Descrierea persoanelor și lucrurilor", audio_fr:"audio/fr/069.mp3", audio_ro:"audio/ro/069.mp3" },
+  { id:70, mot:"grand", pron:"GRAN", trad:"mare / înalt", ex_fr:"Mon frère est très grand.", pron_ex:"mon FRER e tre GRAN", ex_ro:"Fratele meu este foarte înalt.", categorie:"Descrierea persoanelor și lucrurilor", audio_fr:"audio/fr/070.mp3", audio_ro:"audio/ro/070.mp3" },
+  { id:71, mot:"joli", pron:"jo-LI", trad:"drăguț / frumos", ex_fr:"C'est un joli village.", pron_ex:"se TĂN jo-LI vi-LAJ", ex_ro:"Este un sat frumos.", categorie:"Descrierea persoanelor și lucrurilor", audio_fr:"audio/fr/071.mp3", audio_ro:"audio/ro/071.mp3" },
+  { id:72, mot:"moche", pron:"MOȘ", trad:"urât", ex_fr:"Ce bâtiment est moche.", pron_ex:"să ba-ti-MAN e MOȘ", ex_ro:"Această clădire este urâtă.", categorie:"Descrierea persoanelor și lucrurilor", audio_fr:"audio/fr/072.mp3", audio_ro:"audio/ro/072.mp3" },
+  { id:73, mot:"œuf", pron:"ĂF", trad:"ou", ex_fr:"Je mange un œuf au petit-déjeuner.", pron_ex:"jă MANJ ăn ĂF o pă-ti de-jă-NE", ex_ro:"Mănânc un ou la micul dejun.", categorie:"Alimente și băuturi", audio_fr:"audio/fr/073.mp3", audio_ro:"audio/ro/073.mp3" },
+  { id:74, mot:"lait", pron:"LE", trad:"lapte", ex_fr:"Je bois du lait le matin.", pron_ex:"jă BUA diu LE lă ma-TEN", ex_ro:"Beau lapte dimineața.", categorie:"Alimente și băuturi", audio_fr:"audio/fr/074.mp3", audio_ro:"audio/ro/074.mp3" },
+  { id:75, mot:"beurre", pron:"BĂR", trad:"unt", ex_fr:"Je mets du beurre sur le pain.", pron_ex:"jă ME diu BĂR siur lă PEN", ex_ro:"Pun unt pe pâine.", categorie:"Alimente și băuturi", audio_fr:"audio/fr/075.mp3", audio_ro:"audio/ro/075.mp3" },
+  { id:76, mot:"eau", pron:"O", trad:"apă", ex_fr:"Je voudrais un verre d'eau.", pron_ex:"jă vu-DRE ăn VER DO", ex_ro:"Aș dori un pahar cu apă.", categorie:"Alimente și băuturi", audio_fr:"audio/fr/076.mp3", audio_ro:"audio/ro/076.mp3" },
+  { id:77, mot:"thé", pron:"TE", trad:"ceai", ex_fr:"Elle boit du thé sans sucre.", pron_ex:"el BUA diu TE san SIUCR", ex_ro:"Ea bea ceai fără zahăr.", categorie:"Alimente și băuturi", audio_fr:"audio/fr/077.mp3", audio_ro:"audio/ro/077.mp3" },
+  { id:78, mot:"café", pron:"ca-FE", trad:"cafea", ex_fr:"Je prends un café, s'il vous plaît.", pron_ex:"jă PRAN ăn ca-FE, sil vu PLE", ex_ro:"Iau o cafea, vă rog.", categorie:"Alimente și băuturi", audio_fr:"audio/fr/078.mp3", audio_ro:"audio/ro/078.mp3" },
+  { id:79, mot:"fromage", pron:"fro-MAJ", trad:"brânză", ex_fr:"Nous mangeons du fromage français.", pron_ex:"nu man-JON diu fro-MAJ fran-SE", ex_ro:"Mâncăm brânză franțuzească.", categorie:"Alimente și băuturi", audio_fr:"audio/fr/079.mp3", audio_ro:"audio/ro/079.mp3" },
+  { id:80, mot:"légume", pron:"le-GHIUM", trad:"legumă", ex_fr:"La carotte est un légume.", pron_ex:"la ca-ROT e TĂN le-GHIUM", ex_ro:"Morcovul este o legumă.", categorie:"Alimente și băuturi", audio_fr:"audio/fr/080.mp3", audio_ro:"audio/ro/080.mp3" },
+  { id:81, mot:"fruit", pron:"FRUI", trad:"fruct", ex_fr:"Je mange un fruit chaque jour.", pron_ex:"jă MANJ ăn FRUI șac JUR", ex_ro:"Mănânc un fruct în fiecare zi.", categorie:"Alimente și băuturi", audio_fr:"audio/fr/081.mp3", audio_ro:"audio/ro/081.mp3" },
+  { id:82, mot:"pain", pron:"PEN", trad:"pâine", ex_fr:"J'achète du pain frais.", pron_ex:"ja-ȘET diu PEN FRE", ex_ro:"Cumpăr pâine proaspătă.", categorie:"Alimente și băuturi", audio_fr:"audio/fr/082.mp3", audio_ro:"audio/ro/082.mp3" },
+  { id:83, mot:"Où habitez-vous ?", pron:"u a-bi-te-VU", trad:"Unde locuiți?", ex_fr:"Bonjour, où habitez-vous ?", pron_ex:"bon-JUR, u a-bi-te-VU", ex_ro:"Bună ziua, unde locuiți?", categorie:"Prezentare și conversație", audio_fr:"audio/fr/083.mp3", audio_ro:"audio/ro/083.mp3" },
+  { id:84, mot:"Où habites-tu ?", pron:"u a-bit-TIU", trad:"Unde locuiești?", ex_fr:"Paul, où habites-tu ?", pron_ex:"POL, u a-bit-TIU", ex_ro:"Paul, unde locuiești?", categorie:"Prezentare și conversație", audio_fr:"audio/fr/084.mp3", audio_ro:"audio/ro/084.mp3" },
+  { id:85, mot:"Comment tu t'appelles ?", pron:"co-MAN tiu ta-PEL", trad:"Cum te numești?", ex_fr:"Bonjour ! Comment tu t'appelles ?", pron_ex:"bon-JUR! co-MAN tiu ta-PEL", ex_ro:"Bună! Cum te numești?", categorie:"Prezentare și conversație", audio_fr:"audio/fr/085.mp3", audio_ro:"audio/ro/085.mp3" },
+  { id:86, mot:"Comment vous appelez-vous ?", pron:"co-MAN vu za-ple-VU", trad:"Cum vă numiți?", ex_fr:"Excusez-moi, comment vous appelez-vous ?", pron_ex:"ex-ciu-ze-MUA, co-MAN vu za-ple-VU", ex_ro:"Scuzați-mă, cum vă numiți?", categorie:"Prezentare și conversație", audio_fr:"audio/fr/086.mp3", audio_ro:"audio/ro/086.mp3" },
+  { id:87, mot:"Je suis ravi de faire votre connaissance.", pron:"jă sui ra-VI dă FER votr co-ne-SANS", trad:"Sunt încântat să vă cunosc.", ex_fr:"Bonjour, je suis ravi de faire votre connaissance.", pron_ex:"bon-JUR, jă sui ra-VI dă FER votr co-ne-SANS", ex_ro:"Bună ziua, sunt încântat să vă cunosc.", categorie:"Prezentare și conversație", audio_fr:"audio/fr/087.mp3", audio_ro:"audio/ro/087.mp3" },
+  { id:88, mot:"enchanté", pron:"an-șan-TE", trad:"încântat", ex_fr:"Enchanté de vous rencontrer.", pron_ex:"an-șan-TE dă vu ran-con-TRE", ex_ro:"Încântat să vă cunosc.", categorie:"Prezentare și conversație", audio_fr:"audio/fr/088.mp3", audio_ro:"audio/ro/088.mp3" },
+  { id:89, mot:"J'ai … ans.", pron:"je … AN", trad:"Am … ani.", ex_fr:"J'ai quarante-huit ans.", pron_ex:"je ca-ran-tuit AN", ex_ro:"Am 48 de ani.", categorie:"Prezentare și conversație", audio_fr:"audio/fr/089.mp3", audio_ro:"audio/ro/089.mp3" },
+  { id:90, mot:"J'habite à…", pron:"ja-BIT a…", trad:"Locuiesc în/la…", ex_fr:"J'habite à Bucarest.", pron_ex:"ja-BIT a biu-ca-REST", ex_ro:"Locuiesc în București.", categorie:"Prezentare și conversație", audio_fr:"audio/fr/090.mp3", audio_ro:"audio/ro/090.mp3" },
+  { id:91, mot:"Je suis…", pron:"jă SUI…", trad:"Eu sunt…", ex_fr:"Je suis roumain.", pron_ex:"jă sui ru-MEN", ex_ro:"Sunt român.", categorie:"Prezentare și conversație", audio_fr:"audio/fr/091.mp3", audio_ro:"audio/ro/091.mp3" },
+  { id:92, mot:"Je m'appelle…", pron:"jă ma-PEL…", trad:"Mă numesc…", ex_fr:"Je m'appelle Adrian.", pron_ex:"jă ma-PEL a-dri-AN", ex_ro:"Mă numesc Adrian.", categorie:"Prezentare și conversație", audio_fr:"audio/fr/092.mp3", audio_ro:"audio/ro/092.mp3" },
+  { id:93, mot:"chauffeur", pron:"șo-FĂR", trad:"șofer", ex_fr:"Il travaille comme chauffeur.", pron_ex:"il tra-VAI com șo-FĂR", ex_ro:"El lucrează ca șofer.", categorie:"Profesii", audio_fr:"audio/fr/093.mp3", audio_ro:"audio/ro/093.mp3" },
+  { id:94, mot:"vendeur", pron:"van-DĂR", trad:"vânzător", ex_fr:"Le vendeur aide le client.", pron_ex:"lă van-DĂR ED lă cli-AN", ex_ro:"Vânzătorul îl ajută pe client.", categorie:"Profesii", audio_fr:"audio/fr/094.mp3", audio_ro:"audio/ro/094.mp3" },
+  { id:95, mot:"cuisinier", pron:"ciui-zi-NIE", trad:"bucătar", ex_fr:"Le cuisinier prépare le dîner.", pron_ex:"lă ciui-zi-NIE pre-PAR lă di-NE", ex_ro:"Bucătarul pregătește cina.", categorie:"Profesii", audio_fr:"audio/fr/095.mp3", audio_ro:"audio/ro/095.mp3" },
+  { id:96, mot:"pompier", pron:"pon-PIE", trad:"pompier", ex_fr:"Le pompier combat l'incendie.", pron_ex:"lă pon-PIE con-BA lan-san-DI", ex_ro:"Pompierul luptă împotriva incendiului.", categorie:"Profesii", audio_fr:"audio/fr/096.mp3", audio_ro:"audio/ro/096.mp3" },
+  { id:97, mot:"policier", pron:"po-li-SIE", trad:"polițist", ex_fr:"Le policier travaille en ville.", pron_ex:"lă po-li-SIE tra-VAI an VIL", ex_ro:"Polițistul lucrează în oraș.", categorie:"Profesii", audio_fr:"audio/fr/097.mp3", audio_ro:"audio/ro/097.mp3" },
+  { id:98, mot:"secrétaire", pron:"să-cre-TER", trad:"secretar / secretară", ex_fr:"La secrétaire organise la réunion.", pron_ex:"la să-cre-TER or-ga-NIZ la re-iu-NION", ex_ro:"Secretara organizează ședința.", categorie:"Profesii", audio_fr:"audio/fr/098.mp3", audio_ro:"audio/ro/098.mp3" },
+  { id:99, mot:"avocat", pron:"a-vo-CA", trad:"avocat", ex_fr:"L'avocat conseille son client.", pron_ex:"la-vo-CA con-SEI son cli-AN", ex_ro:"Avocatul își consiliază clientul.", categorie:"Profesii", audio_fr:"audio/fr/099.mp3", audio_ro:"audio/ro/099.mp3" },
+  { id:100, mot:"médecin", pron:"med-SEN", trad:"medic", ex_fr:"Le médecin examine le patient.", pron_ex:"lă med-SEN eg-za-MIN lă pa-SIAN", ex_ro:"Medicul examinează pacientul.", categorie:"Profesii", audio_fr:"audio/fr/100.mp3", audio_ro:"audio/ro/100.mp3" },
+  { id:101, mot:"professeur", pron:"pro-fe-SĂR", trad:"profesor", ex_fr:"Le professeur enseigne le français.", pron_ex:"lă pro-fe-SĂR an-SE-NI lă fran-SE", ex_ro:"Profesorul predă franceza.", categorie:"Profesii", audio_fr:"audio/fr/101.mp3", audio_ro:"audio/ro/101.mp3" },
+  { id:102, mot:"printemps", pron:"pren-TAN", trad:"primăvară", ex_fr:"Au printemps, il fait plus chaud.", pron_ex:"o pren-TAN, il fe pliu ȘO", ex_ro:"Primăvara, vremea este mai caldă.", categorie:"Anotimpuri și zilele săptămânii", audio_fr:"audio/fr/102.mp3", audio_ro:"audio/ro/102.mp3" },
+  { id:103, mot:"été", pron:"e-TE", trad:"vară", ex_fr:"En été, nous allons à la mer.", pron_ex:"an e-TE, nu za-LON a la MER", ex_ro:"Vara mergem la mare.", categorie:"Anotimpuri și zilele săptămânii", audio_fr:"audio/fr/103.mp3", audio_ro:"audio/ro/103.mp3" },
+  { id:104, mot:"automne", pron:"o-TON", trad:"toamnă", ex_fr:"En automne, les feuilles tombent.", pron_ex:"an o-TON, le FĂI TOMB", ex_ro:"Toamna cad frunzele.", categorie:"Anotimpuri și zilele săptămânii", audio_fr:"audio/fr/104.mp3", audio_ro:"audio/ro/104.mp3" },
+  { id:105, mot:"hiver", pron:"i-VER", trad:"iarnă", ex_fr:"En hiver, il neige souvent.", pron_ex:"an i-VER, il NEJ su-VAN", ex_ro:"Iarna ninge des.", categorie:"Anotimpuri și zilele săptămânii", audio_fr:"audio/fr/105.mp3", audio_ro:"audio/ro/105.mp3" },
+  { id:106, mot:"lundi", pron:"lăn-DI", trad:"luni", ex_fr:"La réunion est lundi matin.", pron_ex:"la re-iu-NION e lăn-DI ma-TEN", ex_ro:"Ședința este luni dimineața.", categorie:"Anotimpuri și zilele săptămânii", audio_fr:"audio/fr/106.mp3", audio_ro:"audio/ro/106.mp3" },
+  { id:107, mot:"mardi", pron:"mar-DI", trad:"marți", ex_fr:"Je travaille à Paris mardi.", pron_ex:"jă tra-VAI a pa-RI mar-DI", ex_ro:"Lucrez la Paris marți.", categorie:"Anotimpuri și zilele săptămânii", audio_fr:"audio/fr/107.mp3", audio_ro:"audio/ro/107.mp3" },
+  { id:108, mot:"mercredi", pron:"mer-cră-DI", trad:"miercuri", ex_fr:"Nous partons mercredi.", pron_ex:"nu par-TON mer-cră-DI", ex_ro:"Plecăm miercuri.", categorie:"Anotimpuri și zilele săptămânii", audio_fr:"audio/fr/108.mp3", audio_ro:"audio/ro/108.mp3" },
+  { id:109, mot:"jeudi", pron:"jă-DI", trad:"joi", ex_fr:"Le cours est jeudi soir.", pron_ex:"lă CUR e jă-DI SUAR", ex_ro:"Cursul este joi seara.", categorie:"Anotimpuri și zilele săptămânii", audio_fr:"audio/fr/109.mp3", audio_ro:"audio/ro/109.mp3" },
+  { id:110, mot:"vendredi", pron:"van-dră-DI", trad:"vineri", ex_fr:"Le projet commence vendredi.", pron_ex:"lă pro-JE co-MANS van-dră-DI", ex_ro:"Proiectul începe vineri.", categorie:"Anotimpuri și zilele săptămânii", audio_fr:"audio/fr/110.mp3", audio_ro:"audio/ro/110.mp3" },
+  { id:111, mot:"samedi", pron:"sam-DI", trad:"sâmbătă", ex_fr:"Je fais du sport samedi.", pron_ex:"jă FE diu SPOR sam-DI", ex_ro:"Fac sport sâmbătă.", categorie:"Anotimpuri și zilele săptămânii", audio_fr:"audio/fr/111.mp3", audio_ro:"audio/ro/111.mp3" },
+  { id:112, mot:"dimanche", pron:"di-MANȘ", trad:"duminică", ex_fr:"Nous nous reposons dimanche.", pron_ex:"nu nu ră-po-ZON di-MANȘ", ex_ro:"Ne odihnim duminică.", categorie:"Anotimpuri și zilele săptămânii", audio_fr:"audio/fr/112.mp3", audio_ro:"audio/ro/112.mp3" },
+  { id:113, mot:"orage", pron:"o-RAJ", trad:"furtună", ex_fr:"Il y a un orage ce soir.", pron_ex:"il ia TĂN o-RAJ să SUAR", ex_ro:"Este furtună în această seară.", categorie:"Vremea", audio_fr:"audio/fr/113.mp3", audio_ro:"audio/ro/113.mp3" },
+  { id:114, mot:"brouillard", pron:"bru-IAR", trad:"ceață", ex_fr:"Il y a du brouillard sur la route.", pron_ex:"il ia diu bru-IAR siur la RUT", ex_ro:"Este ceață pe drum.", categorie:"Vremea", audio_fr:"audio/fr/114.mp3", audio_ro:"audio/ro/114.mp3" },
+  { id:115, mot:"chaleur", pron:"șa-LĂR", trad:"căldură", ex_fr:"Je supporte mal la chaleur.", pron_ex:"jă siu-PORT mal la șa-LĂR", ex_ro:"Suport greu căldura.", categorie:"Vremea", audio_fr:"audio/fr/115.mp3", audio_ro:"audio/ro/115.mp3" },
+  { id:116, mot:"vent", pron:"VAN", trad:"vânt", ex_fr:"Le vent souffle très fort.", pron_ex:"lă VAN SUFL tre FOR", ex_ro:"Vântul bate foarte tare.", categorie:"Vremea", audio_fr:"audio/fr/116.mp3", audio_ro:"audio/ro/116.mp3" },
+  { id:117, mot:"nuage", pron:"niu-AJ", trad:"nor", ex_fr:"Il y a un nuage gris.", pron_ex:"il ia TĂN niu-AJ GRI", ex_ro:"Este un nor gri.", categorie:"Vremea", audio_fr:"audio/fr/117.mp3", audio_ro:"audio/ro/117.mp3" },
+  { id:118, mot:"soleil", pron:"so-LEI", trad:"soare", ex_fr:"Le soleil brille aujourd'hui.", pron_ex:"lă so-LEI BRII o-jur-DIUI", ex_ro:"Soarele strălucește astăzi.", categorie:"Vremea", audio_fr:"audio/fr/118.mp3", audio_ro:"audio/ro/118.mp3" },
+  { id:119, mot:"neige", pron:"NEJ", trad:"zăpadă", ex_fr:"La neige couvre la route.", pron_ex:"la NEJ CUVR la RUT", ex_ro:"Zăpada acoperă drumul.", categorie:"Vremea", audio_fr:"audio/fr/119.mp3", audio_ro:"audio/ro/119.mp3" },
+  { id:120, mot:"pluie", pron:"PLUI", trad:"ploaie", ex_fr:"La pluie commence ce matin.", pron_ex:"la PLUI co-MANS să ma-TEN", ex_ro:"Ploaia începe în această dimineață.", categorie:"Vremea", audio_fr:"audio/fr/120.mp3", audio_ro:"audio/ro/120.mp3" },
+  { id:121, mot:"Il y a des éclaircies.", pron:"il ia de ze-cler-SI", trad:"Sunt perioade cu cer senin.", ex_fr:"Après la pluie, il y a des éclaircies.", pron_ex:"a-PRE la PLUI, il ia de ze-cler-SI", ex_ro:"După ploaie, apar perioade cu cer senin.", categorie:"Vremea", audio_fr:"audio/fr/121.mp3", audio_ro:"audio/ro/121.mp3" },
+  { id:122, mot:"Il fait mauvais.", pron:"il fe mo-VE", trad:"Vremea este urâtă.", ex_fr:"Aujourd'hui, il fait mauvais.", pron_ex:"o-jur-DIUI, il fe mo-VE", ex_ro:"Astăzi, vremea este urâtă.", categorie:"Vremea", audio_fr:"audio/fr/122.mp3", audio_ro:"audio/ro/122.mp3" },
+  { id:123, mot:"Il vente.", pron:"il VANT", trad:"Este vânt.", ex_fr:"Il vente beaucoup près de la mer.", pron_ex:"il VANT bo-CU pre dă la MER", ex_ro:"Este foarte mult vânt lângă mare.", categorie:"Vremea", audio_fr:"audio/fr/123.mp3", audio_ro:"audio/ro/123.mp3" },
+  { id:124, mot:"Il pleut.", pron:"il PLĂ", trad:"Plouă.", ex_fr:"Il pleut depuis ce matin.", pron_ex:"il PLĂ dă-PIUI să ma-TEN", ex_ro:"Plouă de azi-dimineață.", categorie:"Vremea", audio_fr:"audio/fr/124.mp3", audio_ro:"audio/ro/124.mp3" },
+  { id:125, mot:"froid", pron:"FRUA", trad:"frig / rece", ex_fr:"Il fait froid dehors.", pron_ex:"il fe FRUA dă-OR", ex_ro:"Afară este frig.", categorie:"Vremea", audio_fr:"audio/fr/125.mp3", audio_ro:"audio/ro/125.mp3" },
+  { id:126, mot:"Il fait chaud.", pron:"il fe ȘO", trad:"Este cald.", ex_fr:"En été, il fait chaud à Bucarest.", pron_ex:"an e-TE, il fe ȘO a biu-ca-REST", ex_ro:"Vara este cald în București.", categorie:"Vremea", audio_fr:"audio/fr/126.mp3", audio_ro:"audio/ro/126.mp3" },
+  { id:127, mot:"Il fait beau.", pron:"il fe BO", trad:"Vremea este frumoasă.", ex_fr:"Aujourd'hui, il fait beau et le ciel est bleu.", pron_ex:"o-jur-DIUI, il fe BO e lă SIEL e BLĂ", ex_ro:"Astăzi este vreme frumoasă și cerul este albastru.", categorie:"Vremea", audio_fr:"audio/fr/127.mp3", audio_ro:"audio/ro/127.mp3" }
 ];
 
 /* ======================= TTS PARTAJAT ======================= */
@@ -582,6 +822,12 @@ function makeUtterance(text, lang){
 
 function stopAllAudio(){
   if('speechSynthesis' in window) speechSynthesis.cancel();
+  if(currentAudioEl){
+    currentAudioEl.onended = null;
+    currentAudioEl.onerror = null;
+    currentAudioEl.pause();
+    currentAudioEl = null;
+  }
 }
 
 /* speakText: vorbește cu vocea de sistem; onend e opțional (folosit la redarea în lanț). */
@@ -597,64 +843,170 @@ function speakOne(text, lang){
   speakText(text, lang);
 }
 
+/* ---------- redare fișiere audio reale (generate cu OpenAI), cu rezervă pe vocea de sistem ---------- */
+let currentAudioEl = null;
+
+function speakAudioFile(url, fallbackText, fallbackLang, onend){
+  if(!url){ speakText(fallbackText, fallbackLang, onend); return; }
+  const audio = new Audio(url);
+  currentAudioEl = audio;
+  const fallback = ()=>{ currentAudioEl = null; speakText(fallbackText, fallbackLang, onend); };
+  audio.onended = ()=>{ currentAudioEl = null; onend && onend(); };
+  audio.onerror = fallback;
+  audio.play().catch(fallback);
+}
+
 /* ======================= TABURI PRINCIPALE ======================= */
-document.getElementById('tab-lista').addEventListener('click', ()=>{
-  document.getElementById('tab-lista').classList.add('active');
-  document.getElementById('tab-testare').classList.remove('active');
+function goToLista(){
+  document.getElementById('filter-toggle-btn').classList.add('active');
+  document.getElementById('tab-fr-ro').classList.remove('active');
+  document.getElementById('tab-ro-fr').classList.remove('active');
   document.getElementById('view-lista').classList.add('active');
   document.getElementById('view-testare').classList.remove('active');
+  document.getElementById('island').classList.remove('mode-testare');
   speechSynthesis.cancel();
   stopPlayback();
   if(typeof resetRecording === 'function') resetRecording();
-});
-document.getElementById('tab-testare').addEventListener('click', ()=>{
-  document.getElementById('tab-testare').classList.add('active');
-  document.getElementById('tab-lista').classList.remove('active');
+}
+function goToTestare(testMode){
+  document.getElementById('filter-toggle-btn').classList.remove('active');
+  document.getElementById('tab-fr-ro').classList.toggle('active', testMode === 'fr-ro');
+  document.getElementById('tab-ro-fr').classList.toggle('active', testMode === 'ro-fr');
   document.getElementById('view-testare').classList.add('active');
   document.getElementById('view-lista').classList.remove('active');
+  document.getElementById('island').classList.add('mode-testare');
   speechSynthesis.cancel();
   stopPlayback();
+  if(typeof switchMode === 'function') switchMode(testMode);
+}
+document.getElementById('filter-toggle-btn').addEventListener('click', ()=>{
+  const wasOnLista = document.getElementById('view-lista').classList.contains('active');
+  goToLista();
+  if(wasOnLista) pillsEl.classList.toggle('show');
 });
+document.getElementById('tab-fr-ro').addEventListener('click', ()=> goToTestare('fr-ro'));
+document.getElementById('tab-ro-fr').addEventListener('click', ()=> goToTestare('ro-fr'));
 
 /* ======================= VIEW: LISTĂ ======================= */
 const listEl = document.getElementById('list');
 const speakerSvg = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9v6h4l5 4V5L8 9H4z"/><path d="M15.5 9.2a4 4 0 0 1 0 5.6"/></svg>';
-const playSvg  = '<svg class="icon" id="play-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M7 5.5v13l11-6.5-11-6.5z"/></svg>';
-const pauseSvg = '<svg class="icon" id="play-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><line x1="8" y1="5" x2="8" y2="19"/><line x1="16" y1="5" x2="16" y2="19"/></svg>';
+const playSvg  = '<svg id="island-play-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M7 5.5v13l11-6.5-11-6.5z"/></svg>';
+const pauseSvg = '<svg id="island-pause-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><line x1="8" y1="5" x2="8" y2="19"/><line x1="16" y1="5" x2="16" y2="19"/></svg>';
+
+function normalizeSearch(s){
+  return s.trim().toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"");
+}
+
+/* ---------- cuvinte știute (persistate în browser) ---------- */
+let knownWords = new Set();
+try{
+  const saved = JSON.parse(localStorage.getItem('vocab-known-fr') || '[]');
+  knownWords = new Set(saved);
+}catch(e){}
+function saveKnownWords(){
+  try{ localStorage.setItem('vocab-known-fr', JSON.stringify([...knownWords])); }catch(e){}
+}
 
 cuvinte.forEach((c, i)=>{
   const card = document.createElement('div');
   card.className = 'card';
   card.id = 'card-'+i;
+  card.dataset.searchKey = normalizeSearch(c.mot + ' ' + c.trad);
+  card.dataset.category = c.categorie;
   card.innerHTML = `
-    <div class="accent-bar"></div>
     <div class="card-body">
       <div class="row-top">
         <div class="mot-fr">${c.mot}<button type="button" class="mini-btn" data-play="mot-${i}">${speakerSvg}</button></div>
-        <div class="badge">${i+1}</div>
+        <button type="button" class="badge" id="badge-${i}" data-known-toggle="${i}" title="Marchează ca știut"></button>
       </div>
-      <div class="field-row"><span class="lbl">PR</span><span class="val pron">${c.pron}</span></div>
+      ${c.pron ? `<div class="field-row"><span class="lbl">PR</span><span class="val pron">${c.pron}</span></div>` : ''}
       <div class="field-row"><span class="lbl">RO</span><span class="val">${c.trad}</span></div>
       <hr class="divider-line">
       <div class="field-row"><span class="lbl">EFR</span><span class="val ex">${c.ex_fr}</span><button type="button" class="mini-btn" data-play="ex-${i}" style="margin-left:4px;">${speakerSvg}</button></div>
-      <div class="field-row"><span class="lbl">PRE</span><span class="val pron">${c.pron_ex}</span></div>
+      ${c.pron_ex ? `<div class="field-row"><span class="lbl">PRE</span><span class="val pron">${c.pron_ex}</span></div>` : ''}
       <div class="field-row"><span class="lbl">ERO</span><span class="val">${c.ex_ro}</span></div>
     </div>
   `;
   listEl.appendChild(card);
 });
+renumberBadges();
+
+function renumberBadges(){
+  const visible = getVisibleIndices();
+  visible.forEach((wordIdx, pos)=>{
+    const badge = document.getElementById('badge-'+wordIdx);
+    badge.textContent = `${pos+1}/${visible.length}`;
+    badge.classList.toggle('known', knownWords.has(wordIdx));
+  });
+}
 
 document.getElementById('list').addEventListener('click', (e)=>{
+  const knownBtn = e.target.closest('[data-known-toggle]');
+  if(knownBtn){
+    const i = Number(knownBtn.dataset.knownToggle);
+    if(knownWords.has(i)) knownWords.delete(i); else knownWords.add(i);
+    saveKnownWords();
+    renumberBadges();
+    applyFilters();
+    return;
+  }
   const btn = e.target.closest('.mini-btn');
   if(!btn) return;
   const [type, i] = btn.dataset.play.split('-');
   const c = cuvinte[i];
-  if(type === 'mot') speakOne(c.mot, 'fr-FR');
-  if(type === 'ex') speakOne(c.ex_fr, 'fr-FR');
+  const text = type === 'mot' ? c.mot : c.ex_fr;
+  if(!playing){
+    setActiveCard(Number(i));
+    speakText(text, 'fr-FR', ()=> setActiveCard(-1));
+  } else {
+    speakOne(text, 'fr-FR');
+  }
+});
+
+document.getElementById('word-search').addEventListener('input', ()=>{
+  if(!document.getElementById('view-lista').classList.contains('active')) goToLista();
+  applyFilters();
+});
+
+let activeCategory = 'Toate';
+
+function applyFilters(){
+  const q = normalizeSearch(document.getElementById('word-search').value);
+  document.querySelectorAll('#list .card').forEach(card=>{
+    const idx = Number(card.id.split('-')[1]);
+    const matchesSearch = !q || card.dataset.searchKey.includes(q);
+    let matchesCategory;
+    if(activeCategory === 'Toate') matchesCategory = true;
+    else if(activeCategory === 'De învățat') matchesCategory = !knownWords.has(idx);
+    else if(activeCategory === 'Știute') matchesCategory = knownWords.has(idx);
+    else matchesCategory = card.dataset.category === activeCategory;
+    card.style.display = (matchesSearch && matchesCategory) ? '' : 'none';
+  });
+  renumberBadges();
+}
+
+const categoriiUnice = ['Toate', 'De învățat', 'Știute', ...new Set(cuvinte.map(c => c.categorie).filter(Boolean))];
+const pillsEl = document.getElementById('category-pills');
+categoriiUnice.forEach(cat=>{
+  const btn = document.createElement('button');
+  btn.type = 'button';
+  btn.className = 'pill-btn' + (cat === 'Toate' ? ' active' : '');
+  btn.textContent = cat;
+  btn.dataset.cat = cat;
+  pillsEl.appendChild(btn);
+});
+pillsEl.addEventListener('click', (e)=>{
+  const btn = e.target.closest('.pill-btn');
+  if(!btn) return;
+  activeCategory = btn.dataset.cat;
+  pillsEl.querySelectorAll('.pill-btn').forEach(b => b.classList.toggle('active', b === btn));
+  applyFilters();
 });
 
 let playing = false;
 let currentWordIdx = -1;
+let playQueue = [];
+let playPos = 0;
 
 function setActiveCard(i){
   document.querySelectorAll('#list .card').forEach(el => el.classList.remove('active'));
@@ -665,69 +1017,108 @@ function setActiveCard(i){
   }
 }
 
+function getVisibleIndices(){
+  return cuvinte.map((_,i)=>i).filter(i=>{
+    const card = document.getElementById('card-'+i);
+    return card && card.style.display !== 'none';
+  });
+}
+
 function buildQueueForWord(i){
   const c = cuvinte[i];
   return [
-    { text:c.mot,   lang:'fr-FR' },
-    { text:c.ex_fr, lang:'fr-FR' },
-    { text:c.trad,  lang:'ro-RO' },
-    { text:c.ex_ro, lang:'ro-RO' }
+    { audio:c.audio_fr, text:c.mot + '. ' + c.ex_fr, lang:'fr-FR' },
+    { audio:c.audio_ro, text:c.trad + '. ' + c.ex_ro, lang:'ro-RO' }
   ];
 }
 
 function playSegments(items, idx, onAllDone){
   if(idx >= items.length){ onAllDone && onAllDone(); return; }
-  const {text, lang} = items[idx];
-  speakText(text, lang, ()=> playSegments(items, idx+1, onAllDone));
+  const {audio, text, lang} = items[idx];
+  speakAudioFile(audio, text, lang, ()=> playSegments(items, idx+1, onAllDone));
 }
 
-function playWord(i){
-  if(i >= cuvinte.length){ stopPlayback(); return; }
-  currentWordIdx = i;
-  setActiveCard(i);
-  playSegments(buildQueueForWord(i), 0, ()=>{ if(playing) playWord(i+1); });
+function updatePlayerLabel(pos){
+  document.getElementById('island-player-count').textContent = `${pos+1} din ${playQueue.length}`;
+  document.getElementById('island-player-word').textContent = cuvinte[playQueue[pos]].mot;
 }
 
-function setPlayBtn(iconSvg, label){
-  document.getElementById('play-icon').outerHTML = iconSvg;
-  document.getElementById('play-label').textContent = label;
+function playAtPos(pos){
+  if(pos >= playQueue.length){ stopPlayback(); return; }
+  playPos = pos;
+  const wordIdx = playQueue[pos];
+  currentWordIdx = wordIdx;
+  setActiveCard(wordIdx);
+  updatePlayerLabel(pos);
+  playSegments(buildQueueForWord(wordIdx), 0, ()=>{ if(playing) playAtPos(pos+1); });
+}
+
+function setIslandPlayIcon(iconSvg){
+  const el = document.getElementById('island-pause-icon') || document.getElementById('island-play-icon');
+  if(el) el.outerHTML = iconSvg;
 }
 
 function startPlayback(){
+  playQueue = getVisibleIndices();
+  if(playQueue.length === 0) return;
   playing = true;
-  setPlayBtn(pauseSvg, 'Pauză');
-  document.getElementById('play-btn').classList.add('playing');
-  document.getElementById('stop-btn').classList.add('show');
-  playWord(0);
+  document.getElementById('island').classList.add('is-playing');
+  setIslandPlayIcon(pauseSvg);
+  playAtPos(0);
 }
 function pausePlayback(){
   playing = false;
   if('speechSynthesis' in window && speechSynthesis.speaking) speechSynthesis.pause();
-  setPlayBtn(playSvg, 'Continuă');
-  document.getElementById('play-btn').classList.remove('playing');
+  if(currentAudioEl) currentAudioEl.pause();
+  setIslandPlayIcon(playSvg);
 }
 function resumePlayback(){
   playing = true;
   if('speechSynthesis' in window && speechSynthesis.paused) speechSynthesis.resume();
-  setPlayBtn(pauseSvg, 'Pauză');
-  document.getElementById('play-btn').classList.add('playing');
+  if(currentAudioEl) currentAudioEl.play().catch(()=>{});
+  setIslandPlayIcon(pauseSvg);
 }
 function stopPlayback(){
   playing = false;
   currentWordIdx = -1;
+  playQueue = [];
   stopAllAudio();
   setActiveCard(-1);
-  setPlayBtn(playSvg, 'Redă tot');
-  document.getElementById('play-btn').classList.remove('playing');
-  document.getElementById('stop-btn').classList.remove('show');
+  document.getElementById('island').classList.remove('is-playing');
+  setIslandPlayIcon(playSvg);
 }
 
-document.getElementById('play-btn').addEventListener('click', ()=>{
-  if(!playing && currentWordIdx === -1){ startPlayback(); }
-  else if(playing){ pausePlayback(); }
-  else { resumePlayback(); }
+document.getElementById('island-play-btn').addEventListener('click', ()=>{
+  if(!document.getElementById('view-lista').classList.contains('active')) goToLista();
+  startPlayback();
 });
-document.getElementById('stop-btn').addEventListener('click', stopPlayback);
+document.getElementById('island-pause-btn').addEventListener('click', ()=>{
+  if(playing) pausePlayback(); else resumePlayback();
+});
+document.getElementById('island-stop-btn').addEventListener('click', stopPlayback);
+document.getElementById('island-prev-btn').addEventListener('click', ()=>{
+  const pos = (playPos - 1 + playQueue.length) % playQueue.length;
+  playing = true;
+  setIslandPlayIcon(pauseSvg);
+  playAtPos(pos);
+});
+document.getElementById('island-next-btn').addEventListener('click', ()=>{
+  const pos = (playPos + 1) % playQueue.length;
+  playing = true;
+  setIslandPlayIcon(pauseSvg);
+  playAtPos(pos);
+});
+
+/* ---------- expand / collapse insulă ---------- */
+const islandEl = document.getElementById('island');
+document.getElementById('island-open-btn').addEventListener('click', ()=>{
+  islandEl.classList.remove('collapsed');
+  islandEl.classList.add('expanded');
+});
+document.getElementById('island-collapse-btn').addEventListener('click', ()=>{
+  islandEl.classList.add('collapsed');
+  islandEl.classList.remove('expanded');
+});
 
 /* ======================= VIEW: TESTARE ======================= */
 
@@ -769,10 +1160,12 @@ async function toggleRecording(){
   try{
     const stream = await navigator.mediaDevices.getUserMedia({ audio:true });
     recordedChunks = [];
-    mediaRecorder = new MediaRecorder(stream);
+    const preferredType = ['audio/mp4', 'audio/webm'].find(t => MediaRecorder.isTypeSupported && MediaRecorder.isTypeSupported(t));
+    mediaRecorder = preferredType ? new MediaRecorder(stream, { mimeType: preferredType }) : new MediaRecorder(stream);
     mediaRecorder.ondataavailable = e => { if(e.data.size > 0) recordedChunks.push(e.data); };
     mediaRecorder.onstop = ()=>{
-      const blob = new Blob(recordedChunks, { type:'audio/webm' });
+      const mimeType = mediaRecorder.mimeType || 'audio/mp4';
+      const blob = new Blob(recordedChunks, { type: mimeType });
       if(recordedAudioUrl) URL.revokeObjectURL(recordedAudioUrl);
       recordedAudioUrl = URL.createObjectURL(blob);
       document.getElementById('rec-play-btn').disabled = false;
@@ -828,8 +1221,7 @@ const modes = {
     hintField: 'ex_ro',
     hintLang: 'ro-RO',
     rows: [
-      { id:1, field:'mot',     label:'SCRIERE',   sub:'cuvântul în FR', ph:'ex: réseau' },
-      { id:3, field:'articol', label:'ARTICOL',   sub:'le / la',        ph:'ex: le' }
+      { id:1, field:'mot', label:'SCRIERE', sub:'cuvântul în FR', ph:'ex: réseau' }
     ]
   }
 };
@@ -848,6 +1240,8 @@ function applyModeChrome(){
   document.getElementById('accent-bar-q').style.background = m.accent;
   document.getElementById('listen-hint').textContent = m.listenHint;
   document.getElementById('hint-toggle').textContent = m.hintToggleLabel;
+  const row3 = m.rows.find(r => r.id === 3);
+  document.getElementById('row-3').style.display = row3 ? '' : 'none';
   m.rows.forEach(row=>{
     document.getElementById('label-'+row.id).textContent = row.label;
     document.getElementById('sub-'+row.id).textContent = row.sub;
@@ -893,6 +1287,8 @@ function checkField(i, correctValue){
   return ok;
 }
 
+let maxScoreSoFar = 0;
+
 document.getElementById('check-btn').addEventListener('click', ()=>{
   const m = modes[mode];
   const c = cuvinte[idx];
@@ -902,11 +1298,16 @@ document.getElementById('check-btn').addEventListener('click', ()=>{
     const scoreKey = mode+'-'+idx;
     if(!scoredWords.has(scoreKey)){
       totalScore += correctCount;
+      maxScoreSoFar += m.rows.length;
       scoredWords.add(scoreKey);
     }
-    document.getElementById('score').textContent = `Scor total: ${totalScore} / ${cuvinte.length*2}`;
-    document.getElementById('pron-ref-text').textContent = c.pron;
-    document.getElementById('pron-ref').style.display = 'flex';
+    document.getElementById('score').textContent = `Scor total: ${totalScore} / ${maxScoreSoFar}`;
+    if(c.pron){
+      document.getElementById('pron-ref-text').textContent = c.pron;
+      document.getElementById('pron-ref').style.display = 'flex';
+    } else {
+      document.getElementById('pron-ref').style.display = 'none';
+    }
     checked = true;
     document.getElementById('check-btn').textContent = (idx === cuvinte.length-1) ? 'GATA' : 'URMĂTORUL';
   } else {
