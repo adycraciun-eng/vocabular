@@ -1,0 +1,964 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Vocabular FR</title>
+<style>
+  :root{
+    --maro:#8C2340;
+    --label:#8A93A3;
+    --text-dark:#1B2430;
+    --divider:#E7E9ED;
+    --bg-page:#EEF0F3;
+    --navy:#16233F;
+    --verde:#2E7D4F;
+    --verde-bg:#EAF6EE;
+    --rosu:#B4302F;
+    --rosu-bg:#FBEAEA;
+    font-family:-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    min-height:100vh;
+    background:var(--bg-page);
+    padding:16px 16px 60px 16px;
+  }
+  .wrap{width:100%; max-width:460px; margin:0 auto;}
+  .icon{ width:16px; height:16px; display:block; flex-shrink:0; }
+
+  /* ---------- taburi principale ---------- */
+  .main-tabs{
+    display:flex;
+    background:#E2E5EA;
+    border-radius:12px;
+    padding:4px;
+    margin-bottom:16px;
+  }
+  .main-tabs button{
+    flex:1;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:7px;
+    border:none;
+    background:transparent;
+    padding:11px 0;
+    border-radius:9px;
+    font-size:13.5px;
+    font-weight:700;
+    color:var(--label);
+    cursor:pointer;
+    transition:background .15s, color .15s;
+  }
+  .main-tabs button.active{
+    background:#fff;
+    color:var(--text-dark);
+    box-shadow:0 2px 6px rgba(20,25,40,0.08);
+  }
+
+  .view{ display:none; }
+  .view.active{ display:block; }
+
+  /* ---------- LISTĂ ---------- */
+  .topbar{
+    position:sticky;
+    top:0;
+    z-index:5;
+    background:var(--bg-page);
+    padding:2px 0 12px 0;
+    display:flex;
+    align-items:center;
+    gap:10px;
+  }
+  .title{
+    flex:1;
+    font-size:15.5px;
+    font-weight:700;
+    color:var(--text-dark);
+  }
+  .play-btn{
+    display:flex;
+    align-items:center;
+    gap:7px;
+    border:none;
+    border-radius:12px;
+    background:var(--navy);
+    color:#fff;
+    font-size:13.5px;
+    font-weight:700;
+    padding:11px 16px;
+    cursor:pointer;
+  }
+  .play-btn.playing{ background:var(--verde); }
+  .stop-btn{
+    width:42px; height:42px;
+    border-radius:12px;
+    border:1.5px solid var(--divider);
+    background:#fff;
+    color:var(--text-dark);
+    cursor:pointer;
+    display:none;
+    align-items:center;
+    justify-content:center;
+  }
+  .stop-btn.show{ display:flex; }
+
+  .card{
+    display:flex;
+    gap:10px;
+    margin-bottom:14px;
+    transition:transform .15s;
+  }
+  .accent-bar{
+    width:6px;
+    border-radius:6px;
+    background:var(--maro);
+    flex-shrink:0;
+    transition:background .2s;
+  }
+  .card.active .accent-bar{ background:var(--verde); }
+  .card-body{
+    flex:1;
+    background:#fff;
+    border-radius:18px;
+    padding:18px 20px;
+    box-shadow:0 6px 18px rgba(20,25,40,0.06);
+  }
+  .card.active .card-body{ box-shadow:0 6px 20px rgba(46,125,79,0.18); }
+
+  .row-top{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    margin-bottom:12px;
+  }
+  .mot-fr{
+    font-size:21px;
+    font-weight:700;
+    color:var(--text-dark);
+    display:flex;
+    align-items:center;
+    gap:9px;
+  }
+  .mini-btn{
+    width:30px; height:30px;
+    border-radius:9px;
+    border:none;
+    background:var(--navy);
+    color:#fff;
+    cursor:pointer;
+    flex-shrink:0;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+  }
+  .mini-btn svg{ width:14px; height:14px; }
+  .badge{
+    width:34px; height:34px;
+    border-radius:50%;
+    background:#EEF0F3;
+    color:var(--label);
+    display:flex; align-items:center; justify-content:center;
+    font-size:13px; font-weight:700;
+    flex-shrink:0;
+    transition:background .2s, color .2s;
+  }
+  .card.active .badge{ background:var(--verde); color:#fff; }
+
+  .field-row{
+    display:flex;
+    gap:10px;
+    align-items:baseline;
+    margin-bottom:6px;
+  }
+  .lbl{
+    width:34px;
+    flex-shrink:0;
+    font-size:11px;
+    font-weight:700;
+    letter-spacing:0.3px;
+    color:var(--label);
+  }
+  .val{
+    font-size:15px;
+    color:var(--text-dark);
+  }
+  .val.pron{ color:var(--maro); font-weight:700; }
+  .val.ex{ font-weight:700; }
+
+  .divider-line{
+    border:none;
+    border-top:1px solid var(--divider);
+    margin:12px 0;
+  }
+
+  /* ---------- TESTARE ---------- */
+  .switch{
+    display:flex;
+    background:#E2E5EA;
+    border-radius:12px;
+    padding:4px;
+    margin-bottom:14px;
+  }
+  .switch button{
+    flex:1;
+    border:none;
+    background:transparent;
+    padding:10px 0;
+    border-radius:9px;
+    font-size:13.5px;
+    font-weight:700;
+    color:var(--label);
+    cursor:pointer;
+    transition:background .15s, color .15s;
+  }
+  .switch button.active{
+    background:#fff;
+    color:var(--text-dark);
+    box-shadow:0 2px 6px rgba(20,25,40,0.08);
+  }
+
+  .card-outer{ display:flex; gap:10px; }
+  .accent-bar-q{ width:7px; border-radius:6px; background:var(--maro); flex-shrink:0; transition:background .15s; }
+  .card-q{
+    flex:1;
+    background:#FFFFFF;
+    border-radius:20px;
+    padding:22px;
+    box-shadow:0 8px 24px rgba(20,25,40,0.08);
+  }
+
+  .top{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    margin-bottom:6px;
+  }
+  .kicker{
+    font-size:12px;
+    font-weight:700;
+    color:var(--label);
+    letter-spacing:0.5px;
+  }
+  .badge-q{
+    width:42px; height:42px;
+    border-radius:50%;
+    border:1.5px solid var(--divider);
+    display:flex; align-items:center; justify-content:center;
+    font-size:12.5px; font-weight:700; color:var(--text-dark);
+  }
+
+  .prompt-word{
+    font-size:26px;
+    font-weight:700;
+    color:var(--text-dark);
+    margin:8px 0 14px 0;
+  }
+
+  .listen-row{
+    display:flex;
+    align-items:center;
+    gap:12px;
+    margin:0 0 20px 0;
+  }
+  .sq-btn{
+    width:48px; height:48px;
+    border-radius:12px;
+    border:none;
+    background:var(--navy);
+    color:#fff;
+    cursor:pointer;
+    flex-shrink:0;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+  }
+  .listen-hint{
+    font-size:13.5px;
+    color:var(--label);
+  }
+
+  .hint-toggle{
+    display:block;
+    width:100%;
+    text-align:left;
+    background:none;
+    border:none;
+    color:var(--maro);
+    font-size:13.5px;
+    font-weight:600;
+    padding:0 0 14px 0;
+    cursor:pointer;
+  }
+  .hint-box{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:10px;
+    background:var(--bg-page);
+    border-radius:12px;
+    padding:12px 14px;
+    margin-bottom:16px;
+  }
+  .hint-text{
+    font-size:14px;
+    color:var(--text-dark);
+    line-height:1.4;
+  }
+  .hint-sq-btn{
+    width:38px; height:38px;
+    border-radius:10px;
+    border:none;
+    background:var(--navy);
+    color:#fff;
+    cursor:pointer;
+    flex-shrink:0;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+  }
+
+  table{ width:100%; border-collapse:collapse; }
+  td{ padding:12px 0; vertical-align:middle; border-bottom:1px solid var(--divider); }
+  tr:last-child td{ border-bottom:none; }
+  .col-task{ width:38%; padding-right:10px; }
+  .col-answer{ width:62%; }
+  .task-label{ display:block; font-size:12.5px; font-weight:700; color:var(--text-dark); letter-spacing:0.3px; }
+  .task-sub{ display:block; font-size:11.5px; color:var(--label); }
+  .ans-input{
+    width:100%;
+    padding:9px 10px;
+    border-radius:9px;
+    border:1.5px solid var(--divider);
+    font-size:14.5px;
+    font-family:inherit;
+    outline:none;
+  }
+  .ans-input:focus{ border-color:var(--navy); }
+  .ans-input.correct{ border-color:var(--verde); background:var(--verde-bg); color:var(--verde); font-weight:600; }
+  .ans-input.wrong{ border-color:var(--rosu); background:var(--rosu-bg); color:var(--rosu); font-weight:600; }
+  .correct-hint{ font-size:12px; margin-top:4px; min-height:14px; }
+  .correct-hint.show.ok{ color:var(--verde); }
+  .correct-hint.show.no{ color:var(--rosu); }
+
+  .rec-row{ display:flex; align-items:center; gap:8px; }
+  .rec-btn{
+    width:34px; height:34px;
+    border-radius:50%;
+    border:none;
+    background:var(--rosu);
+    color:#fff;
+    cursor:pointer;
+    display:flex; align-items:center; justify-content:center;
+    flex-shrink:0;
+    transition:transform .15s;
+  }
+  .rec-btn.recording{ animation:pulse 1.2s infinite; }
+  @keyframes pulse{
+    0%{ box-shadow:0 0 0 0 rgba(180,48,47,0.45); }
+    70%{ box-shadow:0 0 0 9px rgba(180,48,47,0); }
+    100%{ box-shadow:0 0 0 0 rgba(180,48,47,0); }
+  }
+  .rec-play-btn{
+    width:34px; height:34px;
+    border-radius:50%;
+    border:none;
+    background:var(--verde);
+    color:#fff;
+    cursor:pointer;
+    display:flex; align-items:center; justify-content:center;
+    flex-shrink:0;
+  }
+  .rec-play-btn:disabled{ background:var(--divider); color:var(--label); cursor:default; }
+  .pron-ref{
+    display:flex;
+    align-items:center;
+    gap:8px;
+    margin-top:8px;
+    font-size:13px;
+    color:var(--maro);
+    font-weight:700;
+  }
+
+  .controls{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:14px;
+    margin-top:18px;
+  }
+  .nav-btn{
+    width:44px; height:44px;
+    border-radius:50%;
+    border:1.5px solid var(--divider);
+    background:#fff;
+    color:var(--text-dark);
+    cursor:pointer;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+  }
+  .check-btn{
+    flex:1;
+    max-width:220px;
+    padding:13px 0;
+    border-radius:12px;
+    border:none;
+    background:var(--navy);
+    color:#fff;
+    font-size:14.5px;
+    font-weight:700;
+    letter-spacing:0.3px;
+    cursor:pointer;
+  }
+  .score{
+    text-align:center;
+    margin-top:14px;
+    font-size:13.5px;
+    font-weight:600;
+    color:var(--text-dark);
+  }
+</style>
+</head>
+<body>
+
+<div class="wrap">
+
+  <div class="main-tabs">
+    <button type="button" class="active" id="tab-lista">
+      <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 6h16M4 12h16M4 18h10"/></svg>
+      Listă
+    </button>
+    <button type="button" id="tab-testare">
+      <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
+      Testare
+    </button>
+  </div>
+
+  <!-- ===================== VIEW: LISTĂ ===================== -->
+  <div class="view active" id="view-lista">
+    <div class="topbar">
+      <div class="title">Vocabular FR · 5 cuvinte</div>
+      <button type="button" class="stop-btn" id="stop-btn" title="Oprește">
+        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="6" y="6" width="12" height="12" rx="2"/></svg>
+      </button>
+      <button type="button" class="play-btn" id="play-btn">
+        <svg class="icon" id="play-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M7 5.5v13l11-6.5-11-6.5z"/></svg>
+        <span id="play-label">Redă tot</span>
+      </button>
+    </div>
+    <div id="list"></div>
+  </div>
+
+  <!-- ===================== VIEW: TESTARE ===================== -->
+  <div class="view" id="view-testare">
+    <div class="switch">
+      <button type="button" class="active" id="btn-fr-ro">FR → RO</button>
+      <button type="button" id="btn-ro-fr">RO → FR</button>
+    </div>
+
+    <div class="card-outer">
+      <div class="accent-bar-q" id="accent-bar-q"></div>
+      <div class="card-q">
+
+        <div class="top">
+          <div class="kicker" id="kicker">VERIFICARE CUVÂNT</div>
+          <div class="badge-q" id="badge">1/5</div>
+        </div>
+
+        <div class="prompt-word" id="prompt-word"></div>
+
+        <div class="listen-row">
+          <button type="button" class="sq-btn" id="play-word-q" title="Ascultă">
+            <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9v6h4l5 4V5L8 9H4z"/><path d="M16.2 8.8a5 5 0 0 1 0 6.4"/><path d="M18.8 6.2a8.5 8.5 0 0 1 0 11.6"/></svg>
+          </button>
+          <div class="listen-hint" id="listen-hint">Ascultă, apoi completează cele trei rânduri de mai jos</div>
+        </div>
+
+        <button type="button" class="hint-toggle" id="hint-toggle">Arată propoziția ajutătoare</button>
+        <div class="hint-box" id="hint-box" style="display:none;">
+          <span class="hint-text" id="hint-text"></span>
+          <button type="button" class="hint-sq-btn" id="play-hint" title="Ascultă propoziția">
+            <svg class="icon" style="width:16px;height:16px;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9v6h4l5 4V5L8 9H4z"/><path d="M16.2 8.8a5 5 0 0 1 0 6.4"/><path d="M18.8 6.2a8.5 8.5 0 0 1 0 11.6"/></svg>
+          </button>
+        </div>
+
+        <table>
+          <tr>
+            <td class="col-task"><span class="task-label" id="label-1">SCRIERE</span><span class="task-sub" id="sub-1">cuvântul în FR</span></td>
+            <td class="col-answer"><input type="text" class="ans-input" id="in-1" placeholder=""><div class="correct-hint" id="hint-1"></div></td>
+          </tr>
+          <tr>
+            <td class="col-task"><span class="task-label">PRONUNȚIE</span><span class="task-sub">înregistrează-te</span></td>
+            <td class="col-answer">
+              <div class="rec-row">
+                <button type="button" class="rec-btn" id="rec-btn" title="Înregistrează">
+                  <svg class="icon" id="rec-icon" viewBox="0 0 24 24" fill="currentColor" stroke="none"><circle cx="12" cy="12" r="7"/></svg>
+                </button>
+                <button type="button" class="rec-play-btn" id="rec-play-btn" title="Redă înregistrarea" disabled>
+                  <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M7 5.5v13l11-6.5-11-6.5z"/></svg>
+                </button>
+                <span class="correct-hint" id="rec-status">Nicio înregistrare</span>
+              </div>
+              <div class="pron-ref" id="pron-ref" style="display:none;">
+                <span id="pron-ref-text"></span>
+                <button type="button" class="hint-sq-btn" id="play-pron-ref" title="Ascultă pronunția corectă" style="width:30px;height:30px;">
+                  <svg class="icon" style="width:14px;height:14px;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9v6h4l5 4V5L8 9H4z"/><path d="M16.2 8.8a5 5 0 0 1 0 6.4"/></svg>
+                </button>
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <td class="col-task"><span class="task-label" id="label-3">TRADUCERE</span><span class="task-sub" id="sub-3">în română</span></td>
+            <td class="col-answer"><input type="text" class="ans-input" id="in-3" placeholder=""><div class="correct-hint" id="hint-3"></div></td>
+          </tr>
+        </table>
+
+      </div>
+    </div>
+
+
+    <div class="controls">
+      <button type="button" class="nav-btn" id="prev-btn">
+        <svg class="icon" style="width:16px;height:16px;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 6l-6 6 6 6"/></svg>
+      </button>
+      <button type="button" class="check-btn" id="check-btn">VERIFICĂ</button>
+      <button type="button" class="nav-btn" id="next-btn">
+        <svg class="icon" style="width:16px;height:16px;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg>
+      </button>
+    </div>
+    <div class="score" id="score"></div>
+  </div>
+
+</div>
+
+<script>
+/* ======================= DATE COMUNE ======================= */
+const cuvinte = [
+  { mot:"chantier", pron:"șan-ti-EI", trad:"șantier", articol:"le",
+    ex_fr:"Le chantier sera terminé la semaine prochaine.",
+    pron_ex:"lö șan-ti-EI sö-RA ter-mi-NE la sö-MEN pro-ȘEN",
+    ex_ro:"Șantierul va fi terminat săptămâna viitoare." },
+  { mot:"réseau", pron:"re-ZO", trad:"rețea", articol:"le",
+    ex_fr:"Nous installons un nouveau réseau de fibre optique.",
+    pron_ex:"nu ăn-sta-LON ăn nu-VO re-ZO dö FIBR op-TIK",
+    ex_ro:"Instalăm o rețea nouă de fibră optică." },
+  { mot:"facture", pron:"fak-TÜR", trad:"factură", articol:"la",
+    ex_fr:"La facture doit être envoyée avant vendredi.",
+    pron_ex:"la fak-TÜR dua ETR ăn-vua-IE a-VĂ vă-drö-DI",
+    ex_ro:"Factura trebuie trimisă până vineri." },
+  { mot:"livraison", pron:"li-vre-ZON", trad:"livrare", articol:"la",
+    ex_fr:"La livraison a été retardée à cause de la météo.",
+    pron_ex:"la li-vre-ZON a e-TE rö-tar-DE a KOZ dö la me-te-O",
+    ex_ro:"Livrarea a fost întârziată din cauza vremii." },
+  { mot:"échéance", pron:"e-șe-ANS", trad:"termen limită", articol:"la",
+    ex_fr:"Nous devons respecter l'échéance du contrat.",
+    pron_ex:"nu dö-VON res-pek-TE le-șe-ANS dü kon-TRA",
+    ex_ro:"Trebuie să respectăm termenul limită al contractului." }
+];
+
+/* ======================= TTS PARTAJAT ======================= */
+/* Vocea de sistem (Web Speech API) — singura variantă stabilă pe iPhone.
+   Încercarea cu vocea Google a fost scoasă: Safari o blochează des, fără avertisment. */
+let roVoice = null, frVoice = null;
+function pickVoices(){
+  const voices = speechSynthesis.getVoices();
+  roVoice = voices.find(v => v.lang && v.lang.toLowerCase().startsWith('ro')) || null;
+  frVoice = voices.find(v => v.lang && v.lang.toLowerCase().startsWith('fr')) || null;
+}
+if('speechSynthesis' in window){
+  pickVoices();
+  speechSynthesis.onvoiceschanged = pickVoices;
+}
+function makeUtterance(text, lang){
+  const u = new SpeechSynthesisUtterance(text);
+  u.lang = lang;
+  u.voice = lang.startsWith('fr') ? frVoice : roVoice;
+  u.rate = 0.85;
+  return u;
+}
+
+function stopAllAudio(){
+  if('speechSynthesis' in window) speechSynthesis.cancel();
+}
+
+/* speakText: vorbește cu vocea de sistem; onend e opțional (folosit la redarea în lanț). */
+function speakText(text, lang, onend){
+  if(!('speechSynthesis' in window)){ onend && onend(); return; }
+  const u = makeUtterance(text, lang);
+  u.onend = ()=> onend && onend();
+  speechSynthesis.speak(u);
+}
+
+function speakOne(text, lang){
+  stopAllAudio();
+  speakText(text, lang);
+}
+
+/* ======================= TABURI PRINCIPALE ======================= */
+document.getElementById('tab-lista').addEventListener('click', ()=>{
+  document.getElementById('tab-lista').classList.add('active');
+  document.getElementById('tab-testare').classList.remove('active');
+  document.getElementById('view-lista').classList.add('active');
+  document.getElementById('view-testare').classList.remove('active');
+  speechSynthesis.cancel();
+  stopPlayback();
+  if(typeof resetRecording === 'function') resetRecording();
+});
+document.getElementById('tab-testare').addEventListener('click', ()=>{
+  document.getElementById('tab-testare').classList.add('active');
+  document.getElementById('tab-lista').classList.remove('active');
+  document.getElementById('view-testare').classList.add('active');
+  document.getElementById('view-lista').classList.remove('active');
+  speechSynthesis.cancel();
+  stopPlayback();
+});
+
+/* ======================= VIEW: LISTĂ ======================= */
+const listEl = document.getElementById('list');
+const speakerSvg = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9v6h4l5 4V5L8 9H4z"/><path d="M15.5 9.2a4 4 0 0 1 0 5.6"/></svg>';
+const playSvg  = '<svg class="icon" id="play-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M7 5.5v13l11-6.5-11-6.5z"/></svg>';
+const pauseSvg = '<svg class="icon" id="play-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><line x1="8" y1="5" x2="8" y2="19"/><line x1="16" y1="5" x2="16" y2="19"/></svg>';
+
+cuvinte.forEach((c, i)=>{
+  const card = document.createElement('div');
+  card.className = 'card';
+  card.id = 'card-'+i;
+  card.innerHTML = `
+    <div class="accent-bar"></div>
+    <div class="card-body">
+      <div class="row-top">
+        <div class="mot-fr">${c.mot}<button type="button" class="mini-btn" data-play="mot-${i}">${speakerSvg}</button></div>
+        <div class="badge">${i+1}</div>
+      </div>
+      <div class="field-row"><span class="lbl">PR</span><span class="val pron">${c.pron}</span></div>
+      <div class="field-row"><span class="lbl">RO</span><span class="val">${c.trad}</span></div>
+      <hr class="divider-line">
+      <div class="field-row"><span class="lbl">EFR</span><span class="val ex">${c.ex_fr}</span><button type="button" class="mini-btn" data-play="ex-${i}" style="margin-left:4px;">${speakerSvg}</button></div>
+      <div class="field-row"><span class="lbl">PRE</span><span class="val pron">${c.pron_ex}</span></div>
+      <div class="field-row"><span class="lbl">ERO</span><span class="val">${c.ex_ro}</span></div>
+    </div>
+  `;
+  listEl.appendChild(card);
+});
+
+document.getElementById('list').addEventListener('click', (e)=>{
+  const btn = e.target.closest('.mini-btn');
+  if(!btn) return;
+  const [type, i] = btn.dataset.play.split('-');
+  const c = cuvinte[i];
+  if(type === 'mot') speakOne(c.mot, 'fr-FR');
+  if(type === 'ex') speakOne(c.ex_fr, 'fr-FR');
+});
+
+let playing = false;
+let currentWordIdx = -1;
+
+function setActiveCard(i){
+  document.querySelectorAll('#list .card').forEach(el => el.classList.remove('active'));
+  if(i >= 0){
+    const el = document.getElementById('card-'+i);
+    el.classList.add('active');
+    el.scrollIntoView({ behavior:'smooth', block:'center' });
+  }
+}
+
+function buildQueueForWord(i){
+  const c = cuvinte[i];
+  return [
+    { text:c.mot,   lang:'fr-FR' },
+    { text:c.ex_fr, lang:'fr-FR' },
+    { text:c.trad,  lang:'ro-RO' },
+    { text:c.ex_ro, lang:'ro-RO' }
+  ];
+}
+
+function playSegments(items, idx, onAllDone){
+  if(idx >= items.length){ onAllDone && onAllDone(); return; }
+  const {text, lang} = items[idx];
+  speakText(text, lang, ()=> playSegments(items, idx+1, onAllDone));
+}
+
+function playWord(i){
+  if(i >= cuvinte.length){ stopPlayback(); return; }
+  currentWordIdx = i;
+  setActiveCard(i);
+  playSegments(buildQueueForWord(i), 0, ()=>{ if(playing) playWord(i+1); });
+}
+
+function setPlayBtn(iconSvg, label){
+  document.getElementById('play-icon').outerHTML = iconSvg;
+  document.getElementById('play-label').textContent = label;
+}
+
+function startPlayback(){
+  playing = true;
+  setPlayBtn(pauseSvg, 'Pauză');
+  document.getElementById('play-btn').classList.add('playing');
+  document.getElementById('stop-btn').classList.add('show');
+  playWord(0);
+}
+function pausePlayback(){
+  playing = false;
+  if('speechSynthesis' in window && speechSynthesis.speaking) speechSynthesis.pause();
+  setPlayBtn(playSvg, 'Continuă');
+  document.getElementById('play-btn').classList.remove('playing');
+}
+function resumePlayback(){
+  playing = true;
+  if('speechSynthesis' in window && speechSynthesis.paused) speechSynthesis.resume();
+  setPlayBtn(pauseSvg, 'Pauză');
+  document.getElementById('play-btn').classList.add('playing');
+}
+function stopPlayback(){
+  playing = false;
+  currentWordIdx = -1;
+  stopAllAudio();
+  setActiveCard(-1);
+  setPlayBtn(playSvg, 'Redă tot');
+  document.getElementById('play-btn').classList.remove('playing');
+  document.getElementById('stop-btn').classList.remove('show');
+}
+
+document.getElementById('play-btn').addEventListener('click', ()=>{
+  if(!playing && currentWordIdx === -1){ startPlayback(); }
+  else if(playing){ pausePlayback(); }
+  else { resumePlayback(); }
+});
+document.getElementById('stop-btn').addEventListener('click', stopPlayback);
+
+/* ======================= VIEW: TESTARE ======================= */
+
+/* ---------- înregistrare pronunție proprie ---------- */
+const recCircleSvg = '<svg class="icon" id="rec-icon" viewBox="0 0 24 24" fill="currentColor" stroke="none"><circle cx="12" cy="12" r="7"/></svg>';
+const recSquareSvg = '<svg class="icon" id="rec-icon" viewBox="0 0 24 24" fill="currentColor" stroke="none"><rect x="7" y="7" width="10" height="10" rx="1.5"/></svg>';
+
+let mediaRecorder = null;
+let recordedChunks = [];
+let recordedAudioUrl = null;
+let isRecording = false;
+
+function resetRecording(){
+  if(isRecording && mediaRecorder){
+    try{ mediaRecorder.stop(); }catch(e){}
+  }
+  if(recordedAudioUrl){ URL.revokeObjectURL(recordedAudioUrl); recordedAudioUrl = null; }
+  recordedChunks = [];
+  isRecording = false;
+  document.getElementById('rec-btn').innerHTML = recCircleSvg;
+  document.getElementById('rec-btn').classList.remove('recording');
+  document.getElementById('rec-play-btn').disabled = true;
+  const status = document.getElementById('rec-status');
+  status.textContent = 'Nicio înregistrare';
+  status.className = 'correct-hint';
+}
+
+async function toggleRecording(){
+  const status = document.getElementById('rec-status');
+  if(isRecording){
+    mediaRecorder.stop();
+    return;
+  }
+  if(!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia){
+    status.textContent = '⚠ Microfonul nu e disponibil în acest browser.';
+    status.className = 'correct-hint show no';
+    return;
+  }
+  try{
+    const stream = await navigator.mediaDevices.getUserMedia({ audio:true });
+    recordedChunks = [];
+    mediaRecorder = new MediaRecorder(stream);
+    mediaRecorder.ondataavailable = e => { if(e.data.size > 0) recordedChunks.push(e.data); };
+    mediaRecorder.onstop = ()=>{
+      const blob = new Blob(recordedChunks, { type:'audio/webm' });
+      if(recordedAudioUrl) URL.revokeObjectURL(recordedAudioUrl);
+      recordedAudioUrl = URL.createObjectURL(blob);
+      document.getElementById('rec-play-btn').disabled = false;
+      status.textContent = '✓ Înregistrare gata — apasă ▶ ca s-o asculți';
+      status.className = 'correct-hint show ok';
+      stream.getTracks().forEach(t => t.stop());
+      isRecording = false;
+      document.getElementById('rec-btn').innerHTML = recCircleSvg;
+      document.getElementById('rec-btn').classList.remove('recording');
+    };
+    mediaRecorder.start();
+    isRecording = true;
+    document.getElementById('rec-btn').innerHTML = recSquareSvg;
+    document.getElementById('rec-btn').classList.add('recording');
+    status.textContent = '● Se înregistrează... apasă din nou ca să oprești';
+    status.className = 'correct-hint';
+  } catch(err){
+    status.textContent = '⚠ Nu am acces la microfon (verifică permisiunile telefonului sau deschide fișierul direct în browser, nu în preview).';
+    status.className = 'correct-hint show no';
+  }
+}
+
+function playRecording(){
+  if(!recordedAudioUrl) return;
+  new Audio(recordedAudioUrl).play();
+}
+
+document.getElementById('rec-btn').addEventListener('click', toggleRecording);
+document.getElementById('rec-play-btn').addEventListener('click', playRecording);
+
+const modes = {
+  'fr-ro': {
+    kicker: 'VERIFICARE CUVÂNT · FR → RO',
+    accent: 'var(--maro)',
+    promptField: 'mot',
+    promptLang: 'fr-FR',
+    listenHint: 'Ascultă cuvântul în franceză, apoi completează',
+    hintToggleLabel: 'Arată propoziția ajutătoare',
+    hintField: 'ex_fr',
+    hintLang: 'fr-FR',
+    rows: [
+      { id:1, field:'mot',  label:'SCRIERE',    sub:'cuvântul în FR',   ph:'ex: réseau' },
+      { id:3, field:'trad', label:'TRADUCERE',  sub:'în română',        ph:'ex: rețea' }
+    ]
+  },
+  'ro-fr': {
+    kicker: 'VERIFICARE CUVÂNT · RO → FR',
+    accent: 'var(--navy)',
+    promptField: 'trad',
+    promptLang: 'ro-RO',
+    listenHint: 'Ascultă cuvântul în română, apoi scrie echivalentul francez',
+    hintToggleLabel: 'Arată propoziția ajutătoare (RO)',
+    hintField: 'ex_ro',
+    hintLang: 'ro-RO',
+    rows: [
+      { id:1, field:'mot',     label:'SCRIERE',   sub:'cuvântul în FR', ph:'ex: réseau' },
+      { id:3, field:'articol', label:'ARTICOL',   sub:'le / la',        ph:'ex: le' }
+    ]
+  }
+};
+
+let mode = 'fr-ro';
+let idx = 0;
+let checked = false;
+let totalScore = 0;
+let scoredWords = new Set();
+
+function pad(){ return `${idx+1}/${cuvinte.length}`; }
+
+function applyModeChrome(){
+  const m = modes[mode];
+  document.getElementById('kicker').textContent = m.kicker;
+  document.getElementById('accent-bar-q').style.background = m.accent;
+  document.getElementById('listen-hint').textContent = m.listenHint;
+  document.getElementById('hint-toggle').textContent = m.hintToggleLabel;
+  m.rows.forEach(row=>{
+    document.getElementById('label-'+row.id).textContent = row.label;
+    document.getElementById('sub-'+row.id).textContent = row.sub;
+    document.getElementById('in-'+row.id).placeholder = row.ph;
+  });
+}
+
+function renderCard(){
+  const m = modes[mode];
+  const c = cuvinte[idx];
+  document.getElementById('badge').textContent = pad();
+  document.getElementById('prompt-word').textContent = c[m.promptField];
+  document.getElementById('hint-text').textContent = c[m.hintField];
+  document.getElementById('hint-box').style.display = 'none';
+  document.getElementById('hint-toggle').textContent = m.hintToggleLabel;
+  [1,3].forEach(i=>{
+    const input = document.getElementById('in-'+i);
+    input.value = '';
+    input.className = 'ans-input';
+    input.disabled = false;
+    const hint = document.getElementById('hint-'+i);
+    hint.className = 'correct-hint';
+    hint.textContent = '';
+  });
+  resetRecording();
+  document.getElementById('pron-ref').style.display = 'none';
+  document.getElementById('check-btn').textContent = 'VERIFICĂ';
+  checked = false;
+}
+
+function normalize(s){
+  return s.trim().toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"");
+}
+
+function checkField(i, correctValue){
+  const input = document.getElementById('in-'+i);
+  const hint = document.getElementById('hint-'+i);
+  const ok = normalize(input.value) === normalize(correctValue);
+  input.className = 'ans-input ' + (ok ? 'correct' : 'wrong');
+  input.disabled = true;
+  hint.classList.add('show', ok ? 'ok' : 'no');
+  hint.textContent = ok ? '✓ corect' : `✗ corect: ${correctValue}`;
+  return ok;
+}
+
+document.getElementById('check-btn').addEventListener('click', ()=>{
+  const m = modes[mode];
+  const c = cuvinte[idx];
+  if(!checked){
+    let correctCount = 0;
+    m.rows.forEach(row=>{ if(checkField(row.id, c[row.field])) correctCount++; });
+    const scoreKey = mode+'-'+idx;
+    if(!scoredWords.has(scoreKey)){
+      totalScore += correctCount;
+      scoredWords.add(scoreKey);
+    }
+    document.getElementById('score').textContent = `Scor total: ${totalScore} / ${cuvinte.length*2}`;
+    document.getElementById('pron-ref-text').textContent = c.pron;
+    document.getElementById('pron-ref').style.display = 'flex';
+    checked = true;
+    document.getElementById('check-btn').textContent = (idx === cuvinte.length-1) ? 'GATA' : 'URMĂTORUL';
+  } else {
+    if(idx < cuvinte.length - 1){ idx++; renderCard(); }
+  }
+});
+
+document.getElementById('play-pron-ref').addEventListener('click', ()=>{
+  speakOne(cuvinte[idx].mot, 'fr-FR');
+});
+
+document.getElementById('play-word-q').addEventListener('click', ()=>{
+  const m = modes[mode];
+  speakOne(cuvinte[idx][m.promptField], m.promptLang);
+});
+document.getElementById('play-hint').addEventListener('click', ()=>{
+  const m = modes[mode];
+  speakOne(cuvinte[idx][m.hintField], m.hintLang);
+});
+
+document.getElementById('hint-toggle').addEventListener('click', ()=>{
+  const box = document.getElementById('hint-box');
+  const btn = document.getElementById('hint-toggle');
+  const m = modes[mode];
+  const isHidden = box.style.display === 'none' || box.style.display === '';
+  if(isHidden){ box.style.display = 'flex'; btn.textContent = 'Ascunde propoziția'; }
+  else { box.style.display = 'none'; btn.textContent = m.hintToggleLabel; }
+});
+
+document.getElementById('prev-btn').addEventListener('click', ()=>{
+  idx = (idx - 1 + cuvinte.length) % cuvinte.length;
+  renderCard();
+});
+document.getElementById('next-btn').addEventListener('click', ()=>{
+  idx = (idx + 1) % cuvinte.length;
+  renderCard();
+});
+
+function switchMode(newMode){
+  if(mode === newMode) return;
+  mode = newMode;
+  idx = 0;
+  document.getElementById('btn-fr-ro').classList.toggle('active', mode==='fr-ro');
+  document.getElementById('btn-ro-fr').classList.toggle('active', mode==='ro-fr');
+  applyModeChrome();
+  renderCard();
+}
+document.getElementById('btn-fr-ro').addEventListener('click', ()=> switchMode('fr-ro'));
+document.getElementById('btn-ro-fr').addEventListener('click', ()=> switchMode('ro-fr'));
+
+applyModeChrome();
+renderCard();
+</script>
+</body>
+</html>
