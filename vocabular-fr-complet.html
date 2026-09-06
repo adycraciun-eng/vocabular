@@ -951,15 +951,22 @@ document.getElementById('list').addEventListener('click', (e)=>{
     return;
   }
   const btn = e.target.closest('.mini-btn');
-  if(!btn) return;
-  const [type, i] = btn.dataset.play.split('-');
-  const c = cuvinte[i];
-  const text = type === 'mot' ? c.mot : c.ex_fr;
-  if(!playing){
-    setActiveCard(Number(i));
-    speakText(text, 'fr-FR', ()=> setActiveCard(-1));
-  } else {
-    speakOne(text, 'fr-FR');
+  if(btn){
+    const [type, i] = btn.dataset.play.split('-');
+    const c = cuvinte[i];
+    const text = type === 'mot' ? c.mot : c.ex_fr;
+    if(!playing){
+      setActiveCard(Number(i));
+      speakText(text, 'fr-FR', ()=> setActiveCard(-1));
+    } else {
+      speakOne(text, 'fr-FR');
+    }
+    return;
+  }
+  const card = e.target.closest('.card');
+  if(card){
+    const i = Number(card.id.split('-')[1]);
+    playSingleCard(i);
   }
 });
 
@@ -1061,6 +1068,19 @@ function setIslandPlayIcon(iconSvg){
 function startPlayback(){
   playQueue = getVisibleIndices();
   if(playQueue.length === 0) return;
+  playing = true;
+  document.getElementById('island').classList.add('is-playing');
+  setIslandPlayIcon(pauseSvg);
+  playAtPos(0);
+}
+
+/* Redă un singur card (la apăsare directă pe el în listă): cardul se
+   colorează (activ) cât timp se aude, în ordine FR cuvânt, FR exemplu,
+   RO traducere, RO exemplu — folosind audio-ul real generat, cu fallback
+   pe vocea de sistem dacă fișierul lipsește. */
+function playSingleCard(i){
+  stopAllAudio();
+  playQueue = [i];
   playing = true;
   document.getElementById('island').classList.add('is-playing');
   setIslandPlayIcon(pauseSvg);
